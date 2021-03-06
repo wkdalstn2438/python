@@ -1,0 +1,54 @@
+import random
+
+
+class charcter:
+    def __init__(self):
+        x = random.randrange(500, 1000)
+        y = random.randrange(100, 500)
+        self.hp = x #직접 넣어도 됨 ranom.randrange~
+        self.mp = y
+        self.atk = random.randrange(1, 10)
+
+    def attack(self):
+        return self.atk
+
+    def fireball(self):
+        damege = self.mp * 0.5
+        if self.mp - damege > 0:
+            self.mp = self.mp - damege
+        else:
+            damege = 0
+
+        return damege
+
+
+a = charcter()
+b = charcter()
+print(a.hp, a.mp, a.atk)
+print(b.hp, b.mp, b.atk)
+
+
+
+
+turn = 0
+while a.hp > 0 and b.hp > 0:
+    if turn == 0:
+        print("스킬을 사용하나요? yes 1")
+        o = int(input())
+
+        if o == 1:
+            b.hp = b.hp - a.fireball()
+        elif o == 2:
+            b.hp = b.hp - a.attack()
+        turn = 1
+    else:
+        a.hp = a.hp - b.attack()
+        turn = 0
+        print(a.hp, b.atk)
+
+
+
+
+
+
+#액션 = 함수, 수치
