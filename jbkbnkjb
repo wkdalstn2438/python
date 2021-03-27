@@ -1,0 +1,71 @@
+import random
+def make_map():
+    game_map = []
+    for i in range(9):
+        game_map.append("-")
+    return game_map
+
+def print_map(m_map):
+    print('------')
+    print(m_map[0] + '|' + m_map[1] + '|' + m_map[2])
+    print('------')
+    print(m_map[3] + '|' + m_map[4] + '|' + m_map[5])
+    print('------')
+    print(m_map[6] + '|' + m_map[7] + '|' + m_map[8])
+    print('------')
+
+def check_win(map):
+    chech = False
+    if game_map[1] == game_map[2] == game_map[0] != "-":
+        check = True
+
+    elif game_map[3] == game_map[4] == game_map[5] != "-":
+        check = True
+
+    elif game_map[6] == game_map[7] == game_map[8] != "-":
+        check = True
+
+    elif game_map[0] == game_map[3] == game_map[6] != "-":
+        check = True
+
+    elif game_map[1] == game_map[4] == game_map[7] != "-":
+        check = True
+
+    elif game_map[2] == game_map[5] == game_map[8] != "-":
+        check = True
+
+    elif game_map[0] == game_map[4] == game_map[8] != "-":
+        check = True
+
+    elif game_map[2] == game_map[4] == game_map[6] != "-":
+        check = True
+
+
+
+
+a = "o"
+b = "x"
+turn = 0
+gane_map = make_map()
+for i in range(9):
+    if turn == 0:
+        while True:
+            num = int(input("entehr the poistion"))
+            if gane_map[num] == "-":
+                gane_map[num] = a
+                break
+        turn = 1
+    else:
+        while True:
+            num = random.randrange(0, 8)
+            if gane_map[num] == "-":
+                gane_map[num] = b
+                break
+        turn = 0
+    print("---------- again")
+    print_map(gane_map)
+    game_win_check = check_win(gane_map)
+
+    if game_win_check:
+        break
+
