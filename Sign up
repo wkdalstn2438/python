@@ -1,0 +1,9 @@
+f = open('test.txt', 'a')
+
+f.write("\nadff,hjhhiasfasf")
+f = open('test.txt', 'r')
+lines = f.readlines()
+for line in lines:
+    temp = line.split(',')
+    temp[1] = temp[1].split('\n')[0]
+print(f)
