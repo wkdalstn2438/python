@@ -1,0 +1,36 @@
+def login(id, pw):
+    f = open("temp.txt", "r")
+
+    lines = f.readlines()
+    for line in lines:
+        temp = line.split(',')
+        temp[1] = temp[1].split('\n')[0]
+        if c == temp:
+            a = c
+            break
+        else:
+            a = 0
+    if a == 0:
+        return False
+    else:
+        return True
+c = []
+for i in range(0,5):
+    print("enter the your ID")
+    id = c.append(input(''))
+    print("enter the passward")
+    pw = c.append(input(''))
+
+    if login(id, pw) == True:
+        print("login succes")
+        break
+    else:
+        if i != 4:
+            print("you can try", 5 - (i + 1), "time")
+        else:
+            print("you can`t login")
+            break
+
+
+
+
