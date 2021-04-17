@@ -1,0 +1,13 @@
+mon = int(input())
+count = 0
+m = [500, 100, 50, 10]
+
+for i in range(len(m)):#4번반복
+    coin = m[i]
+    if mon // coin >= 1:
+        count = count + mon // coin
+        mon = mon - mon // coin * coin
+
+print(count)
+print(mon)
+
