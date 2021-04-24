@@ -1,0 +1,20 @@
+def login(id, pw):
+    f = open("temp.txt", "r")
+    lines = f.readlines()
+    for line in lines:
+        temp = line.split(',')
+        temp[1] = temp[1].split('\n')[0]
+        if [id, pw] == temp:
+            a = [id, pw]
+            break
+        else:
+            a = 0
+    if a == 0:
+        return False
+    else:
+        return True
+
+id = input()
+pw = input()
+f = open('temp.txt', 'a+')
+f.write(id+pw + "\n")
