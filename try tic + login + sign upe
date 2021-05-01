@@ -1,0 +1,61 @@
+import random
+from login_info import login
+from sport import make_map
+from sport import print_map
+from sport import check_win
+from sign_up import signup
+
+a = "o"
+b = "x"
+turn = 0
+gane_map = make_map()
+
+for i in range(0,5):
+    print("enter the your ID: ")
+    id = (input(''))
+    print("enter the passward: ")
+    pw = (input(''))
+    login(id, pw)
+    if login(id, pw) == False:
+        if i != 4:
+            print("you can try", 5 - (i + 1), "time")
+        else:
+            print("you can`t login")
+            print("you try sign up?  1:yes 2:no")
+            m = int(input())
+            if m == 1:
+                signup()
+            else:
+                break
+    else:
+        print("login succes")
+        for i in range(9):
+            if turn == 0:
+                while True:
+                    num = int(input("entehr the poistion"))
+                    if gane_map[num] == "-":
+                        gane_map[num] = a
+                        break
+                turn = 1
+            else:
+                while True:
+                    num = random.randrange(0, 8)
+                    if gane_map[num] == "-":
+                        gane_map[num] = b
+                        break
+                turn = 0
+            print("---------- again")
+            print_map(gane_map)
+            game_win_check = check_win(gane_map)
+
+            if game_win_check:
+                if turn == 0:
+                    print("x win")
+                    break
+                elif turn == 1:
+                    print("o win")
+                    break
+            if game_win_check == False and i == 8:
+                print("draw")
+                break
+        break
