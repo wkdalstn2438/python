@@ -1,0 +1,20 @@
+def signup():
+    f = open('temp.txt', 'r')
+    lines = f.readlines()
+    total_id = []
+    for line in lines:
+        id, pwd = line.split(",")
+        total_id.append(id)
+    f.close()
+
+    f = open('temp.txt', 'a')
+    id = input("enter the id : ")
+    pwd = input("enter the pwd : ")
+
+    if id not in total_id:
+        f.write(id + ',' + pwd + '\n')
+        f.close()
+    else:
+        print("try other id")
+        f.close()
+signup()
