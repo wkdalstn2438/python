@@ -1,0 +1,12 @@
+N, M = map(int, input().split())
+anw = []
+for i in range(N, M + 1):
+    if i == 2:
+        anw.append(i)
+    else:
+        for j in range(2, i):
+            if i % j == 0:
+                break
+            elif j == i-1:
+                anw.append(i)
+print(anw)
