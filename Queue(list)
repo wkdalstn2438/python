@@ -1,0 +1,29 @@
+def Enqueue(stack, data, max_length):
+    if len(stack) < max_length:
+        stack.insert(0, data)
+        print(stack)
+    else:
+        print("over flow")
+
+    return stack
+
+def Dequeue(stack):
+    i = len(stack) - 1
+    if len(stack) > 0:
+        del stack[i]
+        print(stack)
+    else:
+        print("under flow")
+
+stack = []
+max_length = 5
+
+while True:
+    que = input("Enter Enqueue or Dequeue : ")
+
+    if que == "Enqueue":
+        data = int(input("Enter you number : "))
+        stack = Enqueue(stack, data, max_length)
+
+    elif que == "Dequeue":
+        Dequeue(stack)
