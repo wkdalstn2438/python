@@ -1,0 +1,16 @@
+m = int(input())
+n = int(input())
+o = [-1]
+a = 0
+error = -1
+for i in range(0, n):
+    num = i*i
+    if num >= m and num <= n:
+        a = a + num
+        o.append(num)
+if len(o) > 1:
+    print(a)
+    print(o[1])
+else:
+    print(o[0])
+
