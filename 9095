@@ -1,0 +1,18 @@
+t = int(input())
+num = [1, 2, 3]
+none = 0
+for i in range(t):
+    n = int(input())
+    count = 0
+    for r in range(0, 3):
+        print(1)
+        if num[0] + r > n:
+            print(num[0], r)
+            del num[0]
+            break
+        elif num[0] + r == n:
+            count = count + 1
+            print(count)
+            break
+        elif num[0] + r < n:
+            r = r + 1
