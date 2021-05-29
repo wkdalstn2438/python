@@ -1,0 +1,21 @@
+import random
+a = []
+def make_list(a):
+    for i in range(10):
+        b = random.randrange(1, 101)
+        a.append(b)
+    return a
+
+def change(a):
+    for p in range(9):
+        for o in range(len(a) - 1):
+            if a[o] > a[o+1]:
+                a[o], a[o+1] = a[o+1], a[o]
+
+a = make_list(a)
+change(a)
+print(a)
+
+#1. 함수화
+#2. 선택정렬
+
