@@ -1,0 +1,47 @@
+import random
+
+def make_map():
+    #temp = [[1, 2, 3],[4, 5, 6],[7, 8, 9]]
+    temp = []
+    for i in range(5):
+        temp.append([])
+        for j in range(5):
+            a = random.randrange(0, 2)
+            temp[i].append(a)
+
+    return temp
+
+def print_map(m_map):
+    print("{}  {}  {}  {}  {} ".format(' ', ' ', m_map[0][2], m_map[0][3], m_map[0][4]))
+    print("{}  {}  {}  {}  {} ".format(' ', ' ', m_map[1][2], m_map[2][3], m_map[3][4]))
+    print('----|--------')
+    print("{}  {}  {}  {}  {} ".format(str(num[1]), str(num[0]) + '|  ', str(m_map[2][2]), str(m_map[2][3]), str(m_map[2][4])))
+    print('----|--------')
+    print("{}  {}  {}  {}  {} ".format(str(num[3]), str(num[2]) + '|  ', str(m_map[3][2]), str(m_map[3][3]), str(m_map[3][4])))
+    print('----|-------')
+    print("{}  {}  {}  {}  {} ".format(str(num[5]), str(num[4]) + '|  ', str(m_map[4][2]), str(m_map[4][3]), str(m_map[4][4])))
+
+
+
+num = [' ', ' ', ' ', ' ', ' ', ' ']
+m_map = make_map()
+
+if m_map[2][2] == 0 or m_map[2][2] == 1:
+    num[0] = m_map[2][2] + m_map[2][3] + m_map[2][4]
+    if num[0] == 2 and m_map[2][3] == 0:
+        num[0] = 1
+        num[1] = 1
+if m_map[3][2] == 0 or m_map[3][2] == 1:
+    num[2] = m_map[3][2] + m_map[3][3] + m_map[3][4]
+    if num[2] == 2 and m_map[3][3] == 0:
+        num[2] = 1
+        num[3] = 1
+if m_map[4][2] == 0 or m_map[4][2] == 1:
+    num[4] = m_map[4][2] + m_map[4][3] + m_map[4][4]
+    if num[4] == 2 and m_map[4][3] == 0:
+        num[4] = 1
+        num[5] = 1
+
+print_map(m_map)
+
+
