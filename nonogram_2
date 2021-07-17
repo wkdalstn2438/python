@@ -1,0 +1,123 @@
+import random
+
+def make_map():
+    #temp = [[1, 2, 3],[4, 5, 6],[7, 8, 9]]
+    temp = []
+    for i in range(5):
+        temp.append([])
+        for j in range(5):
+            a = random.randrange(0, 2)
+            temp[i].append(a)
+
+    return temp
+
+def print_map(m_map):
+    print("{}  {}  {}  {}  {} ".format(' ', '    ', top_num[1], top_num[3], top_num[5]))
+    print("{}  {}  {}  {}  {} ".format(' ', '    ', top_num[0], top_num[2], top_num[4]))
+    print('----|-------------')
+    print("{}  {}  {}  {}  {} ".format(str(left_num[1]), str(left_num[0]) + '|  ', str(m_map[2][2]), str(m_map[2][3]), str(m_map[2][4])))
+    print('----|-------------')
+    print("{}  {}  {}  {}  {} ".format(str(left_num[3]), str(left_num[2]) + '|  ', str(m_map[3][2]), str(m_map[3][3]), str(m_map[3][4])))
+    print('----|-------------')
+    print("{}  {}  {}  {}  {} ".format(str(left_num[5]), str(left_num[4]) + '|  ', str(m_map[4][2]), str(m_map[4][3]), str(m_map[4][4])))
+
+def see_map(m_map):
+    print("{}  {}  {}  {}  {} ".format(' ', '    ', top_num[1], top_num[3], top_num[5]))
+    print("{}  {}  {}  {}  {} ".format(' ', '    ', top_num[0], top_num[2], top_num[4]))
+    print('----|-------------')
+    print("{}  {}  {}  {}  {} ".format(str(left_num[1]), (str(left_num[0])) + '|  ', (answer[0]), (answer[1]), (answer[2])))
+    print('----|-------------')
+    print("{}  {}  {}  {}  {} ".format(str(left_num[3]), (str(left_num[2])) + '|  ', (answer[3]), (answer[4]), (answer[5])))
+    print('----|-------------')
+    print("{}  {}  {}  {}  {} ".format(str(left_num[5]), (str(left_num[4])) + '|  ', (answer[6]), (answer[7]), (answer[8])))
+
+def make_left_map(m_map):
+    if m_map[2][2] == 0 or 1:
+        left_num[0] = m_map[2][2] + m_map[2][3] + m_map[2][4]
+        if left_num[0] == 2 and m_map[2][3] == 0:
+            left_num[0] = 1
+            left_num[1] = 1
+    if m_map[3][2] == 0 or 1:
+        left_num[2] = m_map[3][2] + m_map[3][3] + m_map[3][4]
+        if left_num[2] == 2 and m_map[3][3] == 0:
+            left_num[2] = 1
+            left_num[3] = 1
+    if m_map[4][2] == 0 or 1:
+        left_num[4] = m_map[4][2] + m_map[4][3] + m_map[4][4]
+        if left_num[4] == 2 and m_map[4][3] == 0:
+            left_num[4] = 1
+            left_num[5] = 1
+
+def make_top_map(m_map):
+    if m_map[2][2] == 0 or 1:
+        top_num[0] = m_map[2][2] + m_map[3][2] + m_map[4][2]
+        if top_num[0] == 2 and m_map[3][2] == 0:
+            top_num[0] = 1
+            top_num[1] = 1
+    if m_map[2][3] == 0 or 1:
+        top_num[2] = m_map[2][3] + m_map[3][3] + m_map[4][3]
+        if top_num[2] == 2 and m_map[3][3] == 0:
+            top_num[2] = 1
+            top_num[3] = 1
+    if m_map[2][4] == 0 or 1:
+        top_num[4] = m_map[2][4] + m_map[3][4] + m_map[4][4]
+        if top_num[4] == 2 and m_map[3][4] == 0:
+            top_num[4] = 1
+            top_num[5] = 1
+
+left_num = [' ', ' ', ' ', ' ', ' ', ' ']
+top_num = [' ', ' ', ' ', ' ', ' ', ' ']
+answer = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
+
+
+m_map = make_map()
+a = 1
+Right_answer = [m_map[2][2], m_map[2][3], m_map[2][4], m_map[3][2], m_map[3][3], m_map[3][4], m_map[4][2], m_map[4][3], m_map[4][4]]
+
+
+make_top_map(m_map)
+make_left_map(m_map)
+see_map(m_map)
+
+
+i = 0
+while i < 10:
+    print("choice number (0~8) or game end(-1)")
+    pick_num = int(input())
+    if pick_num < 9 and pick_num != -1:
+        print("choice o(1) or x(0) number")
+        n = int(input())
+        while True:
+            if n > 1:
+                print("choice o(1) or x(0) number")
+                n = int(input())
+            else:
+                if answer[pick_num] == ' ':
+                    answer[pick_num] = n
+                    see_map(m_map)
+                    i = i + 1
+                    break
+                else:
+                    break
+    elif pick_num > 8:
+        i = i
+    elif pick_num == -1:
+        if answer == Right_answer:
+            print("original")
+            print_map(m_map)
+            print("your`s")
+            see_map(m_map)
+            print('you win')
+            break
+        elif answer != Right_answer:
+            print("original")
+            print_map(m_map)
+            print("your`s")
+            see_map(m_map)
+            print('you lose')
+            break
+
+
+
+
+
