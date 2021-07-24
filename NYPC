@@ -1,0 +1,43 @@
+"""
+nypc 2020 최대구간합
+N = int(input())
+temp = list((map(int, input().split())))
+def max_sum(temp):
+    max = temp[0]
+    num = 0
+    for item in temp:
+        num += item
+        if num > max:
+            max = num
+        if num < 0:
+            num = 0
+    return max
+
+print(max_sum(temp))
+"""
+
+import sys
+import random
+
+a = random.randrange(0, 1001)
+print(a)
+high = 1000
+low = 1
+mid = 500
+for i in range(1, 1001):
+    print(i)
+    sys.stdout.flush()
+    reply = mid
+    print(mid)
+    if a == mid:
+        break
+    if a > mid:
+        high = mid
+        mid = mid + mid // 2
+    if a < mid:
+        low = mid
+        mid = mid - mid // 2
+
+
+
+
