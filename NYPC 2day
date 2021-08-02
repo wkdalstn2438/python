@@ -63,8 +63,9 @@ if abs(c[k-1]) == abs(c[k]) and c[k-1] < 0:
 else:
     c.remove(c[k])
 for o in range(k):
-    num = L.index(c[o]) + 1
-    print(num, end=' ')
+    print(L.index(c[o]) + 1, end=' ')
+
+
 
 
 
