@@ -49,15 +49,23 @@ for i in range(t):
 
 import sys
 a = []
-c = 0
+c = []
 n = int(sys.stdin.readline())
 s, k = map(int, sys.stdin.readline().split())
 L = list(map(int, sys.stdin.readline().split()))
 for i in L:
     a.append(abs(s - i))
     temp = sorted(range(len(a)), key=lambda k: a[k])
-    print(temp)
-for u in range(k)
-    L.index
-#k + 1 한뒤 리스트생성 및 L[temp0 ~ k + 1] 까지 넣고 L[k], l[k + 1] 번째 숫자 플러스 마이너스 비교
+for u in range(k + 1):
+    c.append(L[temp[u]])
+if abs(c[k-1]) == abs(c[k]) and c[k-1] < 0:
+    c.remove(c[k])
+else:
+    c.remove(c[k])
+for o in range(k):
+    num = L.index(c[o]) + 1
+    print(num, end=' ')
+
+
+
 
