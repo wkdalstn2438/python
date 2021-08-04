@@ -1,0 +1,47 @@
+import sys
+
+#최대공약수 LCM
+def GCD():
+    n, m = map(int, sys.stdin.readline().split())
+    for i in range(n, 0, -1):
+        if n % i == 0 and m % i == 0:
+            print(i)
+            break
+
+#최소공배수
+def LCM():
+    n, m = map(int, sys.stdin.readline().split())
+    N = n
+    M = m
+
+    while True:
+        if n > m:
+            m = m + M
+        elif m > n:
+            n = n + N
+        elif n == m:
+            print(n)
+            break
+
+#소인수분해
+def Factorization():
+    n = int(sys.stdin.readline())
+    a = 2
+    while n >= a:
+        if n % a == 0:
+            print(a)
+            n = n / a
+        else:
+            a = a + 1
+
+
+
+
+GCD()
+
+LCM()
+
+Factorization()
+
+
+
