@@ -1,0 +1,52 @@
+"""
+import sys
+a = []
+b = []
+c = []
+x, r = map(int, sys.stdin.readline().split())
+n = int(sys.stdin.readline())
+
+for z in range(n):
+    d, s = map(int, sys.stdin.readline().split())
+    a.append(d)
+    b.append(s)
+e = n
+q = 0
+while len(c) != n:
+    v = e % n
+    a[v] = a[v] + b[v]
+    if a[v] > 0 and a[v] < d + s:
+        q = q + 1
+    if q == n:
+        print('t')
+        break
+    if e == 5000:
+        print('f')
+        break
+    e = e + 1
+
+
+
+    print(a)
+
+
+import sys
+H, t = map(int, sys.stdin.readline().split())
+b = 0
+for i in range(t):
+    a, h = map(int, sys.stdin.readline().split())
+    if a == 1 and H - h >= 0:
+        H = H - h
+    if a == 2 and H != b:
+        H = H + h
+    if a == 3:
+        H = H + h
+        b = H
+        break
+
+print(b)
+"""
+
+
+
+
