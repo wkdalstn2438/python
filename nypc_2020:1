@@ -1,0 +1,31 @@
+import sys
+
+count = 0
+n, m, b = map(int, sys.stdin.readline().split())
+um = []
+a = []
+c = b
+
+for u in range(n):
+    a.append(u)
+    um.append('')
+    b.append(u)
+for i in range(m):
+    v, r = map(int, sys.stdin.readline().split())
+    if  r == 1:
+        if um[c-1] == 0:
+            count += 1
+            um[c-1] 
+            c = v
+        else:
+            
+    else:
+        c = v
+
+print(a)
+print(um)
+
+
+
+
+
