@@ -1,0 +1,16 @@
+import sys
+a = 0
+n = int(sys.stdin.readline())
+L = list(map(int, sys.stdin.readline().split()))
+R = list(map(int, sys.stdin.readline().split()))
+e = n
+while True:
+    v = e % n
+    if L[v] < R[v]:
+        break
+    elif L[v] >= R[v]:
+        a += 1
+        L[v] = L[v] - R[v]
+        e += 1
+
+print(a // n)
