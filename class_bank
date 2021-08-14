@@ -1,0 +1,124 @@
+#class
+# 1.절차지향 -> C, Ruby,, ...
+# 2. 객체지향 -> 파이썬, 자바, C++, ...
+"""
+class Human:
+    def __init__(self, name, age, gender):
+        self.name = name
+        self.age = age
+        self.gender = gender
+
+    def speech(self, text):
+        print(self.name, ":", text)
+
+h1 = Human('홍길동', 20, '남자')
+h2 = Human('아무개', 20, '여자')
+
+h1.speech('히히')    #speech(h1, '안녕하세요')
+h2.speech('반갑습니다')    #speech(h2, '반갑습니다')
+
+class OMG:
+    def print():
+        print('oh my god')
+
+mystock = OMG()
+mystock.print()
+
+class Stock:
+    def __init__(self, name, num):
+        self._name = name
+        self._num = num
+    def set_name(self, name):
+        self._name = name
+    def set_code(self, code):
+        self._code = code
+
+
+삼성 = Stock(None, None)
+삼성.set_name('삼성전자')
+삼성.set_code('005930')
+
+class Stock:
+    def __init__(self, name, num):
+        self.name = name
+        self.num = num
+    def get_name(self):
+        return self.name
+    def get_code(self):
+        return self.num
+
+
+
+a = Stock('삼성전자', "005930")
+print(a.get_code())
+print(a.get_name())
+"""
+import random
+
+
+
+
+
+class Account:
+    count = 0
+
+    def __init__(self, name, mon):
+        self.name = name
+        self.mon = mon
+        self.bank = 'SC은행'
+        self.num = ''
+        self.deposit_count = 0
+        self.d_history = []  #입금내역
+        self.w_history = []  #출금내역
+
+        first = str(random.randint(0, 999)).rjust(3, '0')
+        middle = str(random.randint(0, 99)).rjust(2, '0')
+        last = str(random.randint(0, 999999)).rjust(6, '0')
+        self.num = f'{first}-{middle}-{last}'
+        Account.count += 1
+
+    def deposit(self, sum):
+        if sum > 0:
+            self.mon = self.mon + sum
+            self.deposit_count += 1
+        if self.deposit_count % 5 == 0:
+            self.mon += self.mon * 0.01
+        self.d_history.append('입금:' + str(sum)
+                              + ",잔고:" + str(self.mon))
+
+    def withdraw(self, min):
+        if self.mon > 0:
+            self.mon = self.mon - min
+        self.w_history.append('출금:' + str(min)
+                              + ",잔고:" + str(self.mon))
+    def deposit_history(self):
+        for history in self.d_history:
+            print(history)
+
+    def withdraw_history(self):
+        for history in self.w_history:
+            print(history)
+
+
+    @classmethod
+    def get_account_num(cls):
+        print(cls.count)
+
+    def display_info(self):
+        print('은행이름:', self.bank)
+        print('예금주:', self.name)
+        print('계좌번호:', self.num)
+        print('잔고:', format(self.mon, ","))
+
+
+account_list = [Account('홍길동', 100),
+                Account('아무개', 200),
+                Account('이순신', 30000000)]
+for account in account_list:
+    if account.mon >= 1000000:
+        account.display_info()
+
+
+
+
+
