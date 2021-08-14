@@ -1,0 +1,35 @@
+import sys
+"""
+count = 0
+n, m, b = map(int, sys.stdin.readline().split())
+um = []
+a = b
+
+for u in range(n):
+    um.append(0)
+
+for i in range(m):
+    B, r = map(int, sys.stdin.readline().split())
+    if r == 1:
+        if um[a - 1] == 0:
+            um[B - 1] += 1
+            count += 1
+            a = B
+        elif um[a - 1] > 0:
+            um[a - 1] -= 1
+            um[B - 1] += 1
+            a = B
+    else:
+        a = B
+print(count)
+"""
+n, k = map(int, sys.stdin.readline().split())
+a = []
+t = [[0, 1], [1, 0], [0, -1], [-1, 0]]
+b = []
+count = 0
+tt = 0
+numbers = 1
+for i in range(n):
+    a.append([])
+    b.append([])
