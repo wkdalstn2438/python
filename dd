@@ -1,0 +1,26 @@
+import random
+import sys
+print('가로와 세로의 길이, 지뢰수')
+a, c = map(int, sys.stdin.readline().split())
+temp = []
+
+count = c
+for i in range(a):
+    temp.append([])
+    for u in range(a):
+        temp[i].append(0)
+while count > 0:
+    if c < a*a:
+        rn = random.randrange(0, a)
+        rm = random.randrange(0, a)
+        if temp[rn][rm] != -1:
+            del temp[rn][rm]
+            temp[rn].insert(rm, -1)
+            count -= 1
+        else:
+            pass
+    else:
+        break
+print(temp)
+for o in range(a):
+    print(temp[o])
