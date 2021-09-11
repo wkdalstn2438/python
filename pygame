@@ -1,0 +1,75 @@
+import pygame
+
+pygame.init()  # initializes the Pygame
+from pygame.locals import *  # import all modules from Pygame
+# Define the colors we will use in RGB format
+BLACK= ( 0,  0,  0)
+WHITE= (255,255,255)
+BLUE = ( 0,  0,255)
+GREEN= ( 0,255,  0)
+RED  = (255,  0,  0)
+
+'''
+1. (150, 150)(200, 200), 2. (150, 200)(200, 250), 3. (150, 250)(200, 300), 4. (150, 300)(200, 350), 5. (150, 350)(200, 400)
+1. (200, 150)(200, 200), 2. (200, 200)(200, 250), 3. (250, 200)(200, 300), 4. (150, 300)(200, 350), 5. (150, 350)(200, 400)
+1. (150, 150)(200, 200), 2. (150, 200)(200, 250), 3. (150, 250)(200, 300), 4. (150, 300)(200, 350), 5. (150, 350)(200, 400)
+1. (150, 150)(200, 200), 2. (150, 200)(200, 250), 3. (150, 250)(200, 300), 4. (150, 300)(200, 350), 5. (150, 350)(200, 400)
+1. (150, 150)(200, 200), 2. (150, 200)(200, 250), 3. (150, 250)(200, 300), 4. (150, 300)(200, 350), 5. (150, 350)(200, 400)
+'''
+
+
+myFont = pygame.font.SysFont( "arial", 50, True, False)
+
+
+screen = pygame.display.set_mode((400, 400))
+
+# changing title of the game window
+pygame.display.set_caption('Minso Game')
+
+# changing the logo
+
+run = True
+while run:
+
+    screen.fill((255, 255, 255))
+
+    text_surface = myFont.render("0",True, (0, 0, 0))
+    screen.blit(text_surface, (50, 145))
+    screen.blit(text_surface, (100, 145))
+    screen.blit(text_surface, (50, 195))
+    screen.blit(text_surface, (100, 195))
+    screen.blit(text_surface, (50, 245))
+    screen.blit(text_surface, (100, 245))
+    screen.blit(text_surface, (50, 295))
+    screen.blit(text_surface, (100, 295))
+    screen.blit(text_surface, (50, 345))
+    screen.blit(text_surface, (100, 345))
+
+    screen.blit(text_surface, (165, 50))
+    screen.blit(text_surface, (165, 100))
+    screen.blit(text_surface, (215, 50))
+    screen.blit(text_surface, (215, 100))
+    screen.blit(text_surface, (265, 50))
+    screen.blit(text_surface, (265, 100))
+    screen.blit(text_surface, (315, 50))
+    screen.blit(text_surface, (315, 100))
+    screen.blit(text_surface, (365, 50))
+    screen.blit(text_surface, (365, 100))
+
+
+
+
+    pygame.draw.line(screen, BLACK, (150, 0), (150, 400))
+    pygame.draw.line(screen, BLACK, (200, 0), (200, 400))
+    pygame.draw.line(screen, BLACK, (250, 0), (250, 400))
+    pygame.draw.line(screen, BLACK, (300, 0), (300, 400))
+    pygame.draw.line(screen, BLACK, (350, 0), (350, 400))
+
+
+    pygame.draw.line(screen, BLACK, (0, 150), (400, 150))
+    pygame.draw.line(screen, BLACK, (0, 200), (400, 200))
+    pygame.draw.line(screen, BLACK, (0, 250), (400, 250))
+    pygame.draw.line(screen, BLACK, (0, 300), (400, 300))
+    pygame.draw.line(screen, BLACK, (0, 350), (400, 350))
+    # CHANGING COLOR WITH RGB VALUE, RGB = RED, GREEN, BLUE
+    pygame.display.update()
