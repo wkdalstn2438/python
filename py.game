@@ -1,0 +1,207 @@
+import pygame
+import random
+
+
+def make_map():
+    temp = []
+    for i in range(8):
+        temp.append([])
+        for j in range(8):
+            a = random.randrange(0, 2)
+            temp[i].append(a)
+    return temp
+
+def make_left_map(m_map):
+    a = 2
+    b = 2
+    for u in range(5):
+        a += 1
+        for i in range(7, 2, -1):
+            if m_map[a][i] == 1:
+                left_num[u][b] += m_map[a][i]
+            if m_map[a][i] == 0:
+                b -= 1
+                if b == -1:
+                    b = 2
+    for t in range(5):
+        for q in range(3):
+            if left_num[t][q] == 0:
+                left_num[t][q] = ' '
+    for t in range(5):
+        if left_num[t][2] == ' ' and left_num[t][1] == ' ':
+            left_num[t][2] = left_num[t][0]
+            left_num[t][0] = ' '
+        elif left_num[t][2] == ' ':
+            left_num[t][2] = left_num[t][1]
+            left_num[t][1] = left_num[t][0]
+            left_num[t][0] = ' '
+        elif left_num[t][1] == ' ':
+            left_num[t][1] = left_num[t][0]
+            left_num[t][0] = ' '
+
+
+
+def make_top_map(m_map):
+    a = 2
+    b = 2
+    for u in range(5):
+        a += 1
+        for i in range(5):
+            if m_map[i][a] == 1:
+                top_num[b][u] += m_map[i][a]
+            if m_map[i][a] == 0:
+                b -= 1
+                if b == -1:
+                    b = 2
+    for t in range(3):
+        for q in range(5):
+            if top_num[t][q] == 0:
+                top_num[t][q] = ' '
+    for t in range(5):
+        if top_num[0][t] == ' ' and top_num[1][t] == ' ':
+            top_num[0][t] = top_num[2][t]
+            top_num[2][t] = ' '
+        elif top_num[0][t] == ' ':
+            top_num[0][t] = top_num[1][t]
+            top_num[1][t] = top_num[2][t]
+            top_num[2][t] = ' '
+        elif top_num[1][t] == ' ':
+            top_num[1][t] = top_num[2][t]
+            top_num[2][t] = ' '
+
+m_map = make_map()
+
+left_num = [[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0]]
+top_num = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
+answer = [' '] * 25
+Right_answer = [m_map[3][3], m_map[3][4], m_map[3][5], m_map[3][6], m_map[3][7],
+                m_map[4][3], m_map[4][4], m_map[4][5], m_map[4][6], m_map[4][7],
+                m_map[5][3], m_map[5][4], m_map[5][5], m_map[5][6], m_map[5][7],
+                m_map[6][3], m_map[6][4], m_map[6][5], m_map[6][6], m_map[6][7],
+                m_map[7][3], m_map[7][4], m_map[7][5], m_map[7][6], m_map[7][7]]
+
+make_top_map(m_map)
+make_left_map(m_map)
+
+pygame.init()  # initializes the Pygame
+from pygame.locals import *  # import all modules from Pygame
+# Define the colors we will use in RGB format
+BLACK= ( 0,  0,  0)
+WHITE= (255,255,255)
+BLUE = (0,0,255)
+GREEN= (0,255,0)
+RED  = (255,0,0)
+
+
+one = [[150, 150], [200, 150], [250, 150], [300, 150], [350, 150],
+       [150, 200], [200, 200], [250, 200], [300, 200], [350, 200],
+       [150, 250], [200, 250], [250, 250], [300, 250], [350, 250],
+       [150, 300], [200, 300], [250, 300], [300, 300], [350, 300],
+       [150, 350], [200, 350], [250, 350], [300, 350], [350, 350]]
+one_a = [[200, 200],[250, 200],[300, 200],[350, 200],[400, 200],
+         [200, 250],[250, 250],[300, 250],[350, 250],[400, 250],
+         [200, 300],[250, 300],[300, 300],[350, 300],[400, 300],
+         [200, 350],[250, 350],[300, 350],[350,350],[400, 350],
+         [200, 400],[250, 400],[300, 400],[350, 400],[400, 400]]
+
+b = []
+
+c = 0
+myFont = pygame.font.SysFont( "arial", 50, True, False)
+
+
+screen = pygame.display.set_mode((400, 400))
+
+# changing title of the game window
+pygame.display.set_caption('Minso Game')
+
+# changing the logo
+x = None
+y = None
+
+run = True
+while run:
+
+
+    screen.fill((255, 255, 255))
+
+
+    text_surface = myFont.render('0',True, (0, 0, 0))
+    screen.blit(text_surface, (0, 145))
+    screen.blit(text_surface, (50, 145))
+    screen.blit(text_surface, (100, 145))
+    screen.blit(text_surface, (0, 195))
+    screen.blit(text_surface, (50, 195))
+    screen.blit(text_surface, (100, 195))
+    screen.blit(text_surface, (0, 245))
+    screen.blit(text_surface, (50, 245))
+    screen.blit(text_surface, (100, 245))
+    screen.blit(text_surface, (0, 295))
+    screen.blit(text_surface, (50, 295))
+    screen.blit(text_surface, (100, 295))
+    screen.blit(text_surface, (0, 345))
+    screen.blit(text_surface, (50, 345))
+    screen.blit(text_surface, (100, 345))
+
+    screen.blit(text_surface, (165, 0))
+    screen.blit(text_surface, (165, 50))
+    screen.blit(text_surface, (165, 100))
+    screen.blit(text_surface, (215, 0))
+    screen.blit(text_surface, (215, 50))
+    screen.blit(text_surface, (215, 100))
+    screen.blit(text_surface, (265, 0))
+    screen.blit(text_surface, (265, 50))
+    screen.blit(text_surface, (265, 100))
+    screen.blit(text_surface, (315, 0))
+    screen.blit(text_surface, (315, 50))
+    screen.blit(text_surface, (315, 100))
+    screen.blit(text_surface, (365, 0))
+    screen.blit(text_surface, (365, 50))
+    screen.blit(text_surface, (365, 100))
+
+
+
+
+    pygame.draw.line(screen, BLACK, (150, 0), (150, 400))
+    pygame.draw.line(screen, BLACK, (200, 0), (200, 400))
+    pygame.draw.line(screen, BLACK, (250, 0), (250, 400))
+    pygame.draw.line(screen, BLACK, (300, 0), (300, 400))
+    pygame.draw.line(screen, BLACK, (350, 0), (350, 400))
+
+
+    pygame.draw.line(screen, BLACK, (0, 150), (400, 150))
+    pygame.draw.line(screen, BLACK, (0, 200), (400, 200))
+    pygame.draw.line(screen, BLACK, (0, 250), (400, 250))
+    pygame.draw.line(screen, BLACK, (0, 300), (400, 300))
+    pygame.draw.line(screen, BLACK, (0, 350), (400, 350))
+    # CHANGING COLOR WITH RGB VALUE, RGB = RED, GREEN, BLUE
+
+    # Event 처리
+    for even in pygame.event.get():
+
+        if even.type == pygame.MOUSEBUTTONDOWN:
+            x, y = pygame.mouse.get_pos()
+
+
+        if even.type == pygame.MOUSEBUTTONUP:
+            pass
+
+    if x != None:
+        for i in range(25):
+
+                if one[i][0] <= x and one[i][1] <= y and one_a[i][0] > x and one_a[i][1] > y:
+                    b.append(one[i])
+                    if len(b) != 0:
+                        for v in range(len(b)):
+                            pygame.draw.rect(screen, BLACK, pygame.Rect(b[v][0], b[v][1], 50, 50))
+                        pygame.draw.rect(screen, BLACK, pygame.Rect(one[i][0], one[i][1], 50,50))
+                    else:
+                        pygame.draw.rect(screen, BLACK, pygame.Rect(one[i][0], one[i][1], 50, 50))
+
+
+
+
+
+
+
+    pygame.display.update()
