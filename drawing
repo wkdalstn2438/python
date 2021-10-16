@@ -1,0 +1,104 @@
+"""
+이 스크립트에 윈도우의 CMD 창에 이쁘게 출력하기 위한 클래스 정의합니다.
+
+윈도우 CMD를 제어하기 위해서는 윈도우에서 제공하는 API를 사용해야 하므로 윈도우의 API를
+파이썬에서 사용할 수 있게해주는 ctypes 모듈을 활용합니다.
+(참고: 윈도우의 API는 C/C++로 작성되었으므로 C/C++의 데이터 타입을 선언하여 사용해야 합니다.)
+
+추가로
+표준 입출력 함수 사용을 위해 sys 모듈 사용.
+"""
+import ctypes
+import sys
+
+
+# CMD 창의 좌표를 나타내는 구조체를 선언합니다.
+class COORD(ctypes.Structure):
+    # 구조체의 필드 멤버로 int형 x와 int형 y를 선언한다.
+    _fields_ = [("x", ctypes.c_short), ("y", ctypes.c_short)]
+
+
+# 커서의 정보를 나타내는 구조체를 선언합니다.
+class CURSORINFO(ctypes.Structure):
+    _fields_ = [("size", ctypes.c_int), ("visible", ctypes.c_byte)]
+
+# 화면의 원하는 위치에 텍스트를 그릴 수 있는 클래스입니다.
+class Drawer:
+    # Drawer 클래스의 생성자 선언
+    def __init__(self, width, height):
+        # 윈도우 API에서는 HANDLE 이라는 구조체 변수를 통해
+        # 윈도우의 시스템 어플리케이션 등을 제어할 수 있습니다.
+        # 여기서는 윈도우의 API 함수를 호출하여 표준 출력 스트림의 HANDLE을 가져옵니다.
+        self.o_handle = ctypes.windll.kernel32.GetStdHandle(-11)
+
+        # 그려질 화면의 크기 설정
+        self.width = width
+        self.height = height
+        self.screen = []
+        for y in range(self.height):
+            self.screen.append([' '] * self.width)
+
+    # CMD에서 깜빡이는 커서를 숨길지 보여줄지 설정하는 메서드 입니다.
+    def set_cursor_visible(self, visible):
+        # 커서 구조체 변수 생성.
+        cursor_info = CURSORINFO()
+        # 현재 표준 출력 스트림의 커서 정보를 가져옴.
+        ctypes.windll.kernel32.GetConsoleCursorInfo(self.o_handle, ctypes.byref(cursor_info))
+        # 가져온 커서 정보의 visible에 파라미터로 받은 visible 값을 대입함.
+        cursor_info.visible = visible
+        # 수정된 커서 정보를 표준 출력 스트림에 적용함.
+        ctypes.windll.kernel32.SetConsoleCursorInfo(self.o_handle, ctypes.byref(cursor_info))
+
+    # CMD의 원하는 위치에 문자열을 출력하는 메서드 입니다.
+    def print_at(self, x, y, string):
+        self.screen[y][x] = string
+
+    def flush(self):
+        cursor_pos = COORD(0, 0)
+        ctypes.windll.kernel32.SetConsoleCursorPosition(self.o_handle, cursor_pos)
+        for line in self.screen:
+            sys.stdout.write(''.join(line))
+            sys.stdout.write('\n')
+        sys.stdout.flush()
+
+    # 지정된 화면의 크기만큼 화면을 지우는 메서드 입니다.
+    def clear(self):
+        cursor_pos = COORD(0, 0)
+        ctypes.windll.kernel32.SetConsoleCursorPosition(self.o_handle, cursor_pos)
+        sys.stdout.write((('  ' * self.width) + '\n') * self.height)
+        sys.stdout.flush()
+
+
+# ANSI 문자 인코딩으로 텍스트에 색상을 입혀주는 메서드입니다.
+def get_color_text(color, text):
+    _ANSI_CODE = '\033[38;5;'    # ANSI 색상 변경 코드의 시작 문자열.
+    color_picker = {
+        'red':  _ANSI_CODE + '196m',      # 빨간색 코드
+        'green': _ANSI_CODE + '10m',    # 초록색 코드
+        'yellow': _ANSI_CODE + '226m',   # 노란색 코드
+        'blue': _ANSI_CODE + '21m',     # 파란색 코드
+        'violet': _ANSI_CODE + '13m',   # 보라색 코드
+        'cyan': _ANSI_CODE + '51m',     # 하늘색 코드
+        'orange': _ANSI_CODE + '208m',  # 주황색 코드
+        'white': _ANSI_CODE + '7m'      # 하얀색 코드 (기본 색상)
+    }
+
+    if color not in color_picker.keys():
+        return text
+    else:
+        return color_picker[color] + text + color_picker['white']
+
+
+# 테스트 코드
+if __name__ == '__main__':
+    drawer = Drawer(30, 30)
+    drawer.set_cursor_visible(False)
+    drawer.clear()
+    drawer.print_at(0, 0, get_color_text('red', '■'))
+    drawer.print_at(1, 0, get_color_text('green', '■'))
+    drawer.print_at(2, 0, get_color_text('yellow', '■'))
+    drawer.print_at(3, 0, get_color_text('blue', '■'))
+    drawer.print_at(4, 0, get_color_text('violet', '■'))
+    drawer.print_at(5, 0, get_color_text('cyan', '■'))
+    drawer.print_at(6, 0, get_color_text('orange', '■'))
+    drawer.flush()
