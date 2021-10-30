@@ -1,0 +1,26 @@
+pip install pororo
+
+from pororo import Pororo
+
+ner = Pororo(task="ner", lang="en")
+
+ner("Michael Jeffrey Jordan (born February 17, 1963) is an American businessman and former professional basketball player.")
+
+ner("Michael Jeffrey Jordan (born February 17, 1963) is an American businessman and former professional basketball player.")
+
+ner = Pororo(task="ner", lang="ko")
+ner("마이클 제프리 조던(영어: Michael Jeffrey Jordan, 1963년 2월 17일 ~ )은 미국의 은퇴한 농구 선수이다.")
+
+pip install IPython
+
+pip install epitran
+
+pip install tts
+
+import IPython
+from pororo import Pororo
+
+pip install torch
+
+wt = Pororo(task="word_translation", lang="en", tgt="fr")
+wt("apple")
