@@ -1,7 +1,7 @@
 import cv2
 from cvzone.HandTrackingModule import HandDetector
 import numpy as np
-
+import time
 class Button():
     def __init__(self, pos, text, size=[100, 100]):
 
@@ -35,7 +35,8 @@ colorR = (255, 0, 255)
 button_list = []
 keys = [["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
          ["A", "S", "D", "F", "G", "H", "J", "K", "L", ":"],
-        ["Z", "X", "C", "V", "B", "N", "M", ",", ".", "/"]]
+        ["Z", "X", "C", "V", "B", "N", "M", ",", ".", "/"],
+        ["del", "space"]]
 f = ""
 for out_num, key in enumerate(keys):
     for num, key_elme in enumerate(key):
@@ -69,15 +70,18 @@ while True:
             if y < lmList1[8][1] < y + h and x < lmList1[8][0] < x + w:
                 if l < 50:
                     cv2.rectangle(img, (x, y), (x + w, y + h),
-                                    (255,255,5), cv2.FILLED)
-
+                                        (255,255,5), cv2.FILLED)
                     cv2.putText(img, button.text, (x + 20, y + 60), cv2.FONT_HERSHEY_PLAIN,
-                                    4, (255, 0, 255), 4)
-                    import time
-
-                    f += button.text
-                    time.sleep(0.15)
-
+                                        4, (255, 0, 255), 4)
+                    if button.text == "del":
+                        f = f[:-1]
+                        time.sleep(0.15)
+                    elif button.text == "space":
+                        f += " "
+                        time.sleep(0.15)
+                    else:
+                        f += button.text
+                        time.sleep(0.15)
 
     a = 220
     b = 560
@@ -87,3 +91,4 @@ while True:
     cv2.waitKey(1)
 cap.release()
 cv2.destroyAllWindows()
+
