@@ -1,0 +1,51 @@
+import cv2
+from cvzone.HandTrackingModule import HandDetector
+from pygame.locals import KEYDOWN, K_ESCAPE, K_q
+import pygame
+import sys
+
+cap = cv2.VideoCapture(0)
+pygame.init()
+pygame.display.set_caption("OpenCV camera stream on Pygame")
+screen = pygame.display.set_mode([1280, 720])
+detector = HandDetector(detectionCon=0.9)
+colorR = (255, 0, 255)
+
+try:
+    while True:
+
+        success, frame = cap.read()
+
+        screen.fill([0, 0, 0])
+
+        hands, frame = detector.findHands(frame)
+        if hands:
+            hand1 = hands[0]
+            lmList1 = hand1["lmList"]
+            bbox1 = hand1["bbox"]
+            centerPoint1 = hand1["center"]
+            handType1 = hand1["type"]
+            fingers1 = detector.fingersUp(hand1)
+            l, _, _ = detector.findDistance(lmList1[8], lmList1[12], frame)
+
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
+        frame = frame.swapaxes(0, 1)
+
+        frame = pygame.surfarray.make_surface(frame)
+        screen.blit(frame, (0,0))
+
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit(0)
+            elif event.type == KEYDOWN:
+                if event.key == K_ESCAPE or event.key == K_q:
+                    sys.exit(0)
+
+except (KeyboardInterrupt, SystemExit):
+    pygame.quit()
+    cv2.destroyWindow()
+
+
