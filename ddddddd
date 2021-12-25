@@ -1,0 +1,42 @@
+import pygame
+import sys
+from pygame.locals import KEYDOWN, K_ESCAPE, K_q
+import random
+
+pygame.init()
+pygame.display.set_caption("OpenCV camera stream on Pygame")
+screen = pygame.display.set_mode([1000, 500])
+WHITE = (255, 255, 255)
+GREEN = (0, 255, 0)
+RED = (255, 0, 0)
+BLACK = (0,0,0)
+screen.fill(WHITE)
+font = pygame.font.SysFont('arial',30, True, True)  #폰트 설정
+text = font.render("Click the mouse when it turns green ",True, BLACK)
+a = random.randrange(3000, 4000)
+c = False
+b = 0
+try:
+    while True:
+        b = pygame.time.get_ticks()
+        if a == b:
+            c = True
+        print(c)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit(0)
+            elif event.type == KEYDOWN:
+                if event.key == K_ESCAPE or event.key == K_q:
+                    sys.exit(0)
+                elif event.key == pygame.K_SPACE:
+                    pygame.draw.rect(screen, RED, [200, 40, 600, 300], 0)
+                    screen.blit(text, (250, 10))
+                    break
+                if c == True or event.key == pygame.K_a:
+                    pygame.draw.rect(screen, GREEN, [200, 40, 600, 300], 0)
+                    break
+
+        pygame.display.flip()
+        pygame.display.update()
+except (KeyboardInterrupt, SystemExit):
+    pygame.quit()
