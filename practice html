@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<!-- html 연습 -->
+<p><a href = https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML/Getting_started#entity_references_including_special_characters_in_html title="The Mozilla homepage" target="_blank">html entities site</a></p>
+<p>My cat is <strong>very</strong> grumpy.</p>
+<img src="https://raw.githubusercontent.com/mdn/beginner-html-site/gh-pages/images/firefox-icon.png">
+<p>A link to my <a href="https://www.mozilla.org/" title="The Mozilla homepage" target="_blank">favorite website</a>.</p>
+<input type="text" disabled>
+<input type="text">
+<a href=https://www.mozilla.org/>favorite website</a>
+<a href=https://www.mozilla.org/ title=The Mozilla homepage>favorite website</a>
+<p>&gt;</p>
+<p>Dogs are silly.</p>
+
+<p>Dogs        are
+         silly.</p>
