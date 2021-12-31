@@ -1,15 +1,80 @@
+
 <!DOCTYPE html>
 <!-- html 연습 -->
-<p><a href = https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML/Getting_started#entity_references_including_special_characters_in_html title="The Mozilla homepage" target="_blank">html entities site</a></p>
-<p>My cat is <strong>very</strong> grumpy.</p>
-<img src="https://raw.githubusercontent.com/mdn/beginner-html-site/gh-pages/images/firefox-icon.png">
-<p>A link to my <a href="https://www.mozilla.org/" title="The Mozilla homepage" target="_blank">favorite website</a>.</p>
-<input type="text" disabled>
-<input type="text">
-<a href=https://www.mozilla.org/>favorite website</a>
-<a href=https://www.mozilla.org/ title=The Mozilla homepage>favorite website</a>
-<p>&gt;</p>
-<p>Dogs are silly.</p>
+<!--
+<html>
+    <head>
+        <meta charset="utf-8">
+    <body>
+        <table border=5>
+            <tr>
+                <td>  재무정보  </td>
+                <td>  2017 </td>
+                <td>  2018 </td>
+            </tr>
+            <tr>
+                <td> 매출액 </td>
+                <td> 98,856 </td>
+                <td> 93,655 </td>
+            </tr>
+            <tr>
+                <td> 영업이익 </td>
+                <td> 5,794 </td>
+                <td> 6,235 </td>
+            </tr>
+        </table>
+    </body>
+</html>
 
-<p>Dogs        are
-         silly.</p>
+
+<html>-->
+<!-- '#'은 id '.'은 class로 사용--><!--
+    <style>
+        p {color:red}
+        #cool {color:blue}
+        .top {color:green}
+    </style>
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    <iframe src="https://learningspoons.com"> </iframe>
+        <a href="https://www.naver.com"> 클릭 </a>
+        <ol>
+            <li> 키움증권 </li>
+            <li> 대신증권 </li>
+            <li> 신한카드 </li>
+        </ol>
+        <p class="top">class style color</p>
+        <p>p style color</p>
+        <p id="cool">id style color</p>
+        <input type="password" style="width:200px;">
+        </input>
+        <button> 로그인 </button>
+        <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_160x56dp.png"> </img>
+    </body>
+</html>
+-->
+<html>
+    <style>
+        .data2 > li {color:red}
+    </style>
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <ul class=data1>
+            <li> a </li>
+            <li> b </li>
+            <ul>
+                <li> c </li>
+                <li> d </li>
+            </ul>
+        </ul>
+
+        <ul class=data2>
+            <li> e </li>
+            <li> f </li>
+        </ul>
+    </body>
+</html>
