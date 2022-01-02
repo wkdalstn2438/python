@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <h1 align="center">직원명부 보기</h1><br>
+</head>
+
+<body>
+<style>
+    table {
+    width: 500px;
+    border: 1px solid #444444;
+    border-collapse: collapse;
+  }
+  tr, th, td {
+    text-align: center;
+    border: .8px solid #444444;
+  }
+  .offscreen{
+    position:absolute;
+    overflow:hidden;
+    border:0;
+    width:1px;
+    height:1px;
+    clip: rect(1px, 1px, 1px, 1px);
+    clip-path:inset(50%);
+  }
+</style>
+<table align="center">
+<form method="get">
+    <tr bgcolor=#ffdab9>
+       <td>사원번호</td>
+       <td>이름</td>
+       <td>나이</td>
+       <td>전화번호</td>
+    </tr>
+    {% set row = cycler("odd", "even") %}
+    {% for x in result %}
+    {% if row.current == "odd" %}
+    <tr>
+    {% else %}
+    <tr bgcolor=#f5f5f5>
+    {% endif %}
+       <td>{{ x.ssn }}</td>
+       <td>{{ x.name }}</td>
+       <td>{{ x.age }}</td>
+       <td>{{ x.tel }}</td>
+    <span class="offscreen">{{ row.next() }}</span>
+    </tr>
+    {% endfor %}
+</form>
+</table>
+</body>
+</html>

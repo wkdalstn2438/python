@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <h1 align="center">출퇴근 기록</h1><br>
+</head>
+
+<body>
+<style>
+    table {
+    width: 650px;
+    border: 1px solid #444444;
+    border-collapse: collapse;
+  }
+  tr, th, td {
+    text-align: center;
+    border: .8px solid #444444;
+  }
+  .offscreen{
+    position:absolute;
+    overflow:hidden;
+    border:0;
+    width:1px;
+    height:1px;
+    clip: rect(1px, 1px, 1px, 1px);
+    clip-path:inset(50%);
+  }
+</style>
+<table align="center">
+<form method="get">
+    <tr bgcolor=#f0f0ff>
+       <td>사원번호</td>
+       <td>이름</td>
+       <td>출근시간</td>
+       <td>퇴근시간</td>
+    </tr>
+    {% set row = cycler("odd", "even") %}
+    {% for x in result %}
+    {% if row.current == "odd" %}
+    <tr>
+    {% else %}
+    <tr bgcolor=#f5f5f5>
+    {% endif %}
+       <td>{{ x.ssn }}</td>
+       <td>{{ x.name }}</td>
+       <td>{{ x.st.strftime('%Y년 %m월 %d일 %H시 %M분') }}</td>
+       {% if x.et %}
+       <td>{{ x.et.strftime('%Y년 %m월 %d일 %H시 %M분') }}</td>
+       {% endif %}
+    <span class="offscreen">{{ row.next() }}</span>
+    </tr>
+    {% endfor %}
+</form>
+</table>
+
+</body>
+</html>
