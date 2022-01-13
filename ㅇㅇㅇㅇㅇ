@@ -1,0 +1,126 @@
+import pygame
+import random
+
+
+screen = pygame.display.set_mode((1900, 1000))
+
+# changing title of the game window
+pygame.display.set_caption('turning card')
+
+# 블럭 색 정하기
+color = []
+BLACK = (0,0,0)
+WHITE = (255,255,255)
+
+# 바탕색
+map_color = (90, 109, 129)
+
+card = []
+card_f = pygame.image.load("card/card_back_300.PNG").convert()
+card_2_d = pygame.image.load("card/2_diamond.png").convert()
+card_3_h = pygame.image.load("card/3_heart.png").convert()
+card_3_s = pygame.image.load("card/3_spade.png").convert()
+card_4_c = pygame.image.load("card/4_clover.png").convert()
+card_5_c = pygame.image.load("card/5_clover.png").convert()
+card_6_c = pygame.image.load("card/6_clover.png").convert()
+card_6_d = pygame.image.load("card/6_diamond.png").convert()
+card_7_h = pygame.image.load("card/7_heart.png").convert()
+card_8_s = pygame.image.load("card/8_spade.png").convert()
+card_9_d = pygame.image.load("card/9_diamond.png").convert()
+card_10_d = pygame.image.load("card/10_diamond.png").convert()
+card_a_c = pygame.image.load("card/A_clover.png").convert()
+card_a_d = pygame.image.load("card/A_diamond.png").convert()
+card_a_h = pygame.image.load("card/A_heart.png").convert()
+card_a_s = pygame.image.load("card/A_spade.png").convert()
+card_j_h = pygame.image.load("card/J_heart.png").convert()
+card_j_s = pygame.image.load("card/J_spade.png").convert()
+card_j = pygame.image.load("card/Joker.png").convert()
+card_k_c = pygame.image.load("card/K_clover.png").convert()
+card_k_d = pygame.image.load("card/K_diamond.png").convert()
+card_q_h = pygame.image.load("card/Q_heart.png").convert()
+card_q_s = pygame.image.load("card/Q_spade.png").convert()
+card.append(card_2_d)
+card.append(card_3_h)
+card.append(card_3_s)
+card.append(card_4_c)
+card.append(card_5_c)
+card.append(card_6_c)
+card.append(card_6_d)
+card.append(card_7_h)
+card.append(card_8_s)
+card.append(card_9_d)
+card.append(card_10_d)
+card.append(card_a_c)
+card.append(card_a_d)
+card.append(card_a_h)
+card.append(card_a_s)
+card.append(card_j_h)
+card.append(card_j_s)
+card.append(card_j)
+card.append(card_k_c)
+card.append(card_k_d)
+card.append(card_q_h)
+card.append(card_q_s)
+card.append(card_f)
+card.append(card_f)
+
+
+# 랜덤 값 리스트
+rand = []
+for i in range(24):
+
+    rand.append(i)
+    rand.append(i)
+
+card_num = []
+count_list = []
+coordinate = [] #좌표리스트
+x = 50
+y = 50
+count = 0
+for i in range(0, 48):
+    count_list.append(i)
+    c = []
+    if i == 0:
+        pass
+    else:
+        x += 150
+        count += 1
+        if count == 12:
+            x = 50
+            y += 250
+            count = 0
+    c.append(x)
+    c.append(y)
+    coordinate.append(c)
+a = 48
+for i in range(48):
+    r = random.randrange(0, a)
+    if r in count_list:
+        card_num.append(rand[r])
+        del count_list[r]
+    else:
+        while r in count_list:
+            r = random.randrange(0, a)
+            card_num.append(rand[r])
+            del count_list[r]
+    a -= 1
+    print(count_list)
+    print(i)
+
+# 게임 실행
+start_ticks = pygame.time.get_ticks()
+run = True
+timer = 0
+while run:
+    screen.fill(WHITE)
+    if timer < 20:
+        for u in range(48):
+            screen.blit(card_f, (coordinate[u][0], coordinate[u][1]))
+
+    elif timer > 20:
+        for u in range(48):
+            screen.blit(card[card_num[u]], (coordinate[u][0], coordinate[u][1]))
+
+    timer += 1
+    pygame.display.update()
