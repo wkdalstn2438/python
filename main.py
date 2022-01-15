@@ -1,15 +1,130 @@
-def detection_result():
-    device = select_device('cpu')
+import pygame
+import random
 
-    dect_model = attempt_load('../save_model/yolo_best.pt', map_location=device)
-    dect_model.eval()
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+map_color = (82, 130, 137)
 
-    with torch.no_grad():
-        detection_result = []
 
-        img_path = ""
-        img = cv2.imread(img_path)
+def make_draw_line():
+    for u in range(25):
+        screen.blit(color_list[random_color_list[u]], (position_list[u][0], position_list[u][1]))
+    for i in range(1, 6):
+        pygame.draw.line(screen, BLACK, (80 * i, 0), (80 * i, 400), 5)
+        pygame.draw.line(screen, BLACK, (0, 80 * i), (400, 80 * i), 5)
 
-        detection_pred, _ = detect_img(img, dect_model)
-        detection_result.append(detection_pred)
+def make_color_list():
+    color = []
+    RED = pygame.image.load("candy/red.PNG").convert()
+    PURPLE = pygame.image.load("candy/purple.PNG").convert()
+    ORANGE = pygame.image.load("candy/orange.PNG").convert()
+    GREEN = pygame.image.load("candy/green.PNG").convert()
+    BLUE = pygame.image.load("candy/blue.PNG").convert()
+    YELLOW = pygame.image.load("candy/yellow.PNG").convert()
 
+    color.append(RED)
+    color.append(PURPLE)
+    color.append(ORANGE)
+    color.append(GREEN)
+    color.append(BLUE)
+    color.append(YELLOW)
+    return color
+
+def make_random_position_color_list():
+    x = 5
+    y = 5
+    count = 0
+
+    random_color_list = []
+    position_list = []
+    # color list
+    for i in range(0, 25):
+        c = []
+        if i == 0:
+            pass
+        else:
+            x += 82
+            count += 1
+            if count == 5:
+                x = 5
+                y += 82
+                count = 0
+        c.append(x)
+        c.append(y)
+        position_list.append(c)
+        random_color_list.append(random.randrange(0, 6))
+
+    return position_list, random_color_list
+
+def make_position_fin_list(list):
+    position_fin_list = []
+    for i in range(len(list)):
+        xy = []
+        c = list[i][0] + 81
+        d = list[i][1] + 81
+        xy.append(c)
+        xy.append(d)
+        position_fin_list.append(xy)
+    return position_fin_list
+
+def change_block():
+    change_block_a = random_color_list[position_list.index(start)]
+    change_block_b = random_color_list[position_list.index(finish)]
+    random_color_list[position_list.index(start)] = change_block_b
+    random_color_list[position_list.index(finish)] = change_block_a
+
+    x_a = None
+    x_b = None
+    return x_a, x_b
+screen = pygame.display.set_mode((400, 400))
+pygame.display.set_caption('candy crash saga')
+
+# 좌표에 랜덤 블럭 넣기, 리스트에 블럭 색 정리
+color_list = make_color_list()
+position_list, random_color_list = make_random_position_color_list() #좌표리스트
+position_fin_list = make_position_fin_list(position_list)
+
+
+start = 0
+finish = 0
+x_a = None
+y_a = None
+x_b = None
+y_b = None
+
+# 게임 실행
+run = True
+while run:
+
+    screen.fill(map_color)
+    make_draw_line()
+
+    # Event 처리
+    for even in pygame.event.get():
+
+        if even.type == pygame.MOUSEBUTTONDOWN:
+            x_a, y_a = pygame.mouse.get_pos()
+
+        elif even.type == pygame.MOUSEBUTTONUP:
+            x_b, y_b = pygame.mouse.get_pos()
+
+    if x_a != None:
+        for i in range(25):
+            if position_list[i][0] <= x_a and position_list[i][1] <= y_a and position_fin_list[i][0] > x_a and position_fin_list[i][1] > y_a:
+                start = position_list[i]
+    if x_b != None:
+        for i in range(25):
+            if position_list[i][0] <= x_b and position_list[i][1] <= y_b and position_fin_list[i][0] > x_b and position_fin_list[i][1] > y_b:
+                finish = position_list[i]
+
+        if finish != start:
+            if start[0]+45 < finish[0] and start[0]+150 > finish[0] and start[1] == finish[1]:
+                x_a, x_b = change_block()
+            elif start[0]-45 > finish[0] and start[0]-150 < finish[0] and start[1] == finish[1]:
+                x_a, x_b = change_block()
+            elif start[1]+45 < finish[1] and start[1]+150 > finish[1] and start[0] == finish[0]:
+                x_a, x_b = change_block()
+            elif start[1]-45 > finish[1] and start[1]-150 < finish[1] and start[0] == finish[0]:
+                x_a, x_b = change_block()
+
+    pygame.display.update()
