@@ -1,0 +1,33 @@
+import streamlit as st
+
+a = st.subheader('이름')
+name = st.text_input('')
+
+gender = st.radio("성별", ("남자", "여자"))
+
+b = st.subheader('나이')
+age = st.number_input('')
+
+rank = st.radio("티어", ("아이언,언랭", '브론즈', '실버', '골드', '플레', '다이아', '마스터', '그마', '챌린저'))
+
+line = st.multiselect('자주가는 라인',
+                              ['탑', '정글', '미드', '원딜', '서폿'])
+st_line = ''.join(line)
+
+head = st.subheader("자주하는 챔프")
+champ = st.text_input(' ')
+
+c = st.header("하루 평균 플레이 시간")
+time = st.time_input('')
+
+fin = st.button
+file = ['name : ', name,'\n', 'gender : ', gender,'\n', "age : ",
+        str(age), '\n', "rank : ", rank,'\n',
+        "line : ", st_line, '\n',"champ : ", champ, '\n',"time : ", str(time), "\n"]
+if st.button("제출"):
+    from glob import glob
+    total_files = glob("*.txt")
+    with open("text_{}.txt".format(str(len(total_files) + 1)), 'w') as f:
+        for ans in file:
+            f.write(ans)
+        f.close()
