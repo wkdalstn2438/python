@@ -1,0 +1,17 @@
+n = int(input())
+
+a = list(map(int, input().split()))
+
+x = 0
+max = -1001
+cnt = 0
+while cnt != len(a)-1:
+    num = a[cnt]
+    for i in a:
+        num += i
+        if max < num:
+            max = num
+        if num < 0:
+            break
+    cnt += 1
+    print(max)
