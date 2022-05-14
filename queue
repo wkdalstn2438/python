@@ -1,0 +1,68 @@
+from collections import deque
+import sys
+
+def queue(LS):
+
+    count = 0
+
+    while True:
+        MAX = max(LS)
+
+        if LS[0] == MAX and LS[1] == 0:
+            count += 1
+            return count
+
+        elif LS[0] < MAX:
+            p_l = LS.popleft()
+            LS.append(p_l)
+
+        else:
+            count += 1
+            __ = LS.popleft()
+
+def Set(n):
+
+    for _ in range(n):
+        N, M = map(int, sys.stdin.readline().split())
+        M_LST = deque(list(map(int, sys.stdin.readline().split())))
+        M_LST.insert(M+1, 0)
+        print(queue(M_LST))
+
+
+
+n = int(sys.stdin.readline())
+Set(n)
+from collections import deque
+import sys
+
+def queue(LS):
+
+    count = 0
+
+    while True:
+        MAX = max(LS)
+
+        if LS[0] == MAX and LS[1] == 0:
+            count += 1
+            return count
+
+        elif LS[0] < MAX:
+            p_l = LS.popleft()
+            LS.append(p_l)
+
+        else:
+            count += 1
+            __ = LS.popleft()
+
+def Set(n):
+
+    for _ in range(n):
+        N, M = map(int, sys.stdin.readline().split())
+        M_LST = deque(list(map(int, sys.stdin.readline().split())))
+        M_LST.insert(M+1, 0)
+        print(queue(M_LST))
+
+
+
+n = int(sys.stdin.readline())
+Set(n)
