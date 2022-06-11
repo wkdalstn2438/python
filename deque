@@ -1,0 +1,41 @@
+from collections import deque
+'''
+0 0 0 
+0 0 0 
+0 0 0 
+'''
+arr = []
+for i in range(3):
+    arr.append(list(map(int, input().split())))
+print(arr)
+
+deq = deque()
+deq.append([0,0])
+
+arrows = [[0, 1], [0, -1], [1, 0], [-1, 0]]
+while True:
+    if len(deq) == 0:
+        break
+    x, y = deq.popleft()
+    for arrow in arrows:
+        a_x, a_y = arrow
+
+        b_x = a_x + x
+        b_y = a_y + y
+
+        if b_x < 3 and b_x >= 0 and b_y < 3 and b_y >= 0:
+            if arr[b_x][b_y] == 0:
+                deq.append([b_x, b_y])
+                break
+
+x, y = deq.popleft()
+arr[x][y] = 1
+
+deq.append([x, y+1])
+x, y = deq.popleft()
+arr[x][y] = 2
+
+print(arr)
+# 1 2 3
+# 6 5 4
+# 7 8 9
