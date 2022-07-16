@@ -1,0 +1,34 @@
+import queue
+import copy
+m,n = map(int, input().split())
+to_list = []
+arrow = [[0,1], [1,0], [0,-1], [-1,0]]
+
+for i in range(n):
+    a = list(map(int, input().split()))
+    to_list.append(a)
+visit_list = copy.deepcopy(to_list)
+q = queue.Queue()
+if visit_list[n][m] == 1:
+    q.put((0,0,1))
+else:
+    q.put((0, 0, 0))
+
+while not q.empty():
+
+
+    x, y, count = q.get()
+    if x == n and y == m:
+        print(count)
+        break
+
+    for i in range(len(arrow)):
+        c_x = x + arrow[i][0]
+        c_y = y + arrow[i][1]
+
+        if n > c_x >= 0 and m > c_y >= 0:
+            if to_list[c_x][c_y] >-1 and visit_list[c_x][c_y] == 0:
+                q.put((c_x, c_y, count+1))
+                visit_list[c_x][c_y] = 1
+                print(visit_list)
+
