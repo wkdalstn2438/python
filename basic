@@ -1,0 +1,85 @@
+"""
+for i in range(10):
+    x = (i+1) * '*'
+    print(x)
+
+x = '*' * 10
+for i in range(10):
+    print(x)
+    x = '*' * (10 - i - 1)
+
+
+for i in range(100):
+    if i % 3 == 0:
+        print("*")
+    else:
+        print(i)
+
+a = [i for i in range(1, 101)]
+n = int(input())
+
+min = a[0]
+max = a[-1]
+count = 1
+while True:
+    mid = min + (max - min) // 2
+    if n == mid:
+        break
+
+    elif n < mid:
+        max = mid-1
+
+    else:
+        min = mid+1
+    count += 1
+print(count)
+
+
+n = int(input())
+if n == 1:
+    print("no")
+elif n == 2:
+    print("yes")
+else:
+    for i in range(2, n):
+        if n % i == 0:
+            print("no")
+            break
+    if i == n-1:
+        print("yes")
+
+n = int(input())
+a = [0, 1]
+for i in range(n-2):
+    a.append(a[-1] + a[-2])
+print(a[n-1])
+
+
+a = {}
+b = str(input())
+for i in b:
+    if i not in a:
+        a[i] = 1
+    else:
+        a[i] = a[i]+1
+print(a)
+"""
+count = 0
+n, m = map(int, input().split())
+f = list(map(int, input().split()))
+i = 0
+del f[0]
+
+if len(f) == 0:
+    count = m
+else:
+    for _ in range(m):
+        a = 0
+        party = list(map(int, input().split()))
+        del party[0]
+        for i in f:
+            if i in party:
+                a = 1
+        if i == f[-1] and a != 1:
+            count += 1
+print(count)
