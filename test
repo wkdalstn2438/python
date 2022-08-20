@@ -1,0 +1,21 @@
+import sys
+# 2
+# 10 19
+# 29 4*3
+# 1-2       # 1- 3
+# 2-2   5   # 2- 2  9
+# 4-1       # 4- 3
+n = sys.stdin.readline()
+a = list(map(int, sys.stdin.readline().split()))
+
+temp = [1, 2, 4]
+
+a.sort(reverse=True)
+m = a[0]
+
+for i in range(len(a)):
+    a[i] = abs(a[i] - m)
+b = sum(a)
+
+if b % 7 == 0:
+    pass
