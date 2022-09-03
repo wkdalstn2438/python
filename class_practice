@@ -1,0 +1,65 @@
+class Node:
+    def __init__(self, data, link=None):
+        self.data = data
+        self.link = link
+
+class MyList:
+    def __init__(self, *args):
+        self.head = None
+        self.tail = None
+        self.lenght = 0
+
+    def append(self, data):
+        node = Node(data)
+        if self.head == None:
+            self.head = node
+            self.tail = node
+        else:
+            self.tail.link = node
+            self.tail = node
+            self.lenght += 1
+
+    def __iter__(self):
+        def gen():
+            curr = self.head
+            while curr is not None:
+                yield curr.data
+                curr = curr.link
+        return gen()
+
+    def __str__(self):
+        s = "<"
+        for idx, data in enumerate(self):
+            s += str(data)
+            if idx < len(self) - 1:
+                s += " , "
+            else:
+                s += ">"
+        return s
+
+    def __getitem__(self, item):
+        if type(item) is not int:
+            raise TypeError("인덱스는 반드시 정수여야 합니다")
+        if item < 0:
+            item = len(self) + item
+
+            if item >= len(self) or item < 0:
+                raise IndexError("인덱스 범위를 벗어났습니다")
+
+            for idx, data in enumerate(self):
+                if idx == item:
+                    return data
+    def __setitem__(self, key, value):
+        if type(key) is not int:
+            raise TypeError("인덱스는 반드시 정수여야 합니다.")
+        if key < 0:
+            item = len(self) + key
+        if key >= len(self) or key < 0:
+            raise IndexError("인덱스 범위를 벗어났습니다")
+        curr = self.head
+        for i in range(key):
+            curr = curr.link
+        curr.data = value
+mylist = MyList(1, 2, 3, 4)
+mylist[3] = 5
+print(mylist[3])
