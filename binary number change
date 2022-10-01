@@ -1,0 +1,84 @@
+"""
+a = str(input())
+
+num = 0
+count = 0
+for i in range(len(a)-1, -1, -1):
+    if a[i] == "1":
+        num += (2 ** count)
+    count += 1
+
+print(num)
+"""
+
+
+a = int(input())
+
+c = []
+
+while True:
+    c.append(a % 2)
+    if a < 2:
+        break
+    a = a // 2
+
+c.reverse()
+for i in c:
+    print(i, end="")
+
+"""
+a = str(input())
+c = []
+for i in range(len(a)-1, -1, -1):
+    if a[i] == "0":
+        c.append(1)
+    elif a[i] == "1":
+        c.append(0)
+for u in range(len(c)):
+    if c[u] == 0:
+        c[u] = 1
+        if u != 0:
+            c[u-1] = 0
+        c.reverse()
+        for i in c:
+            print(i, end='')
+        break
+    elif u == len(c)-1:
+        b = len(c)
+        print(b-1 ** 10)
+"""
+"""
+s = 0
+a = str(input())
+c = []
+if a[0] == "1":
+    docs = -1
+else:
+    docs = 1
+for i in range(len(a)-1, -1, -1):
+    if a[i] == "0":
+        c.append("1")
+    elif a[i] == "1":
+        c.append("0")
+
+for u in range(len(c)):
+    if c[u] == "0":
+        c[u] = "1"
+        if u != 0:
+            c[u-1] = "0"
+        c.reverse()
+
+        s = "".join(c)
+        break
+    elif u == len(c)-1:
+        b = len(c)
+        s = b-1 ** 10
+num = 0
+count = 0
+for i in range(len(s)-1, -1, -1):
+    if s[i] == "1":
+        num += (2 ** count)
+    count += 1
+
+print(num*docs)
+"""
