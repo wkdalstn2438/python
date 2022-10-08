@@ -1,0 +1,60 @@
+"""
+a = str(input())
+b = 0
+count = 0.5
+for i in a:
+    b += count * int(i)
+    count *= 0.5
+print(b)
+
+
+
+
+a = int(input()) * 2
+list = []
+count = 10
+while count < a:
+    count *= 10
+for i in range(23):
+    if a >= count:
+        list.append(1)
+        a -= count
+    else:
+        list.append(0)
+    if a == 0:
+        break
+    a *= 2
+
+for u in list:
+    print(u, end="")
+"""
+class num():
+    def __init__(self):
+        self.hangul_num = num
+    def __float__(self):
+        a = []
+        if num == "영":
+            a.append((0))
+        elif num == "일":
+            a.append((1))
+        elif num == "이":
+            a.append((2))
+        elif num == "삼":
+            a.append((3))
+        elif num == "사":
+            a.append((4))
+        elif num == "오":
+            a.append((5))
+        elif num == "육":
+            a.append((6))
+        elif num == "칠":
+            a.append((7))
+        elif num == "팔":
+            a.append(str(8))
+        elif num == "구":
+            a.append(str(9))
+        else:
+            raise ValueError(self.hangul_num + "은 실수로 변환할 수 없습니다.")
+
+        result = ''.join(s for s in a)
+    return result
