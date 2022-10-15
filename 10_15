@@ -1,0 +1,107 @@
+class HangulStudy:
+    def __init__(self, num):
+        self.num = num
+
+    def __str__(self):
+        a = []
+        result = []
+        for i in str(self.num):
+            a.append(i)
+
+        if self.num // 1000000000000 != 0:
+            b = a[0:4]
+            for u in b:
+                if u == "1":
+                    result.append("일")
+                elif u == "2":
+                    result.append("이")
+                elif u == "3":
+                    result.append("삼")
+                elif u == "4":
+                    result.append("사")
+                elif u == "5":
+                    result.append("오")
+                elif u == "6":
+                    result.append("육")
+                elif u == "7":
+                    result.append("칠")
+                elif u == "8":
+                    result.append("팔")
+                elif u == "9":
+                    result.append("구")
+            result.append("조")
+            del a[0:4]
+        if self.num // 100000000 != 0:
+            b = a[0:4]
+            for u in b:
+                if u == "1":
+                    result.append("일")
+                elif u == "2":
+                    result.append("이")
+                elif u == "3":
+                    result.append("삼")
+                elif u == "4":
+                    result.append("사")
+                elif u == "5":
+                    result.append("오")
+                elif u == "6":
+                    result.append("육")
+                elif u == "7":
+                    result.append("칠")
+                elif u == "8":
+                    result.append("팔")
+                elif u == "9":
+                    result.append("구")
+            result.append("억")
+            del a[0:len(a)-4]
+        if self.num // 10000 != 0:
+            b = a[0:len(a)-4]
+            print(b)
+            for u in b:
+                if u == "1":
+                    result.append("일")
+                elif u == "2":
+                    result.append("이")
+                elif u == "3":
+                    result.append("삼")
+                elif u == "4":
+                    result.append("사")
+                elif u == "5":
+                    result.append("오")
+                elif u == "6":
+                    result.append("육")
+                elif u == "7":
+                    result.append("칠")
+                elif u == "8":
+                    result.append("팔")
+                elif u == "9":
+                    result.append("구")
+            result.append("만")
+            del a[0:len(a)-4]
+        if self.num // 1 != 0:
+            b = a[0:4]
+            print(b)
+            for u in b:
+                if u == "1":
+                    result.append("일")
+                elif u == "2":
+                    result.append("이")
+                elif u == "3":
+                    result.append("삼")
+                elif u == "4":
+                    result.append("사")
+                elif u == "5":
+                    result.append("오")
+                elif u == "6":
+                    result.append("육")
+                elif u == "7":
+                    result.append("칠")
+                elif u == "8":
+                    result.append("팔")
+                elif u == "9":
+                    result.append("구")
+        re = "".join(s for s in result)
+        return re
+
+a = HangulStudy(12345)
+print(str(a))
