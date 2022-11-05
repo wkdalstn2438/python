@@ -1,0 +1,66 @@
+"""
+from collections import deque
+
+def DFS(matrix, start_node):
+    visit = [False] * len(matrix)
+    stack = []
+    stack.append(start_node)
+    visit[start_node] = True
+    print("방문", start_node)
+
+    while stack:
+        node = stack.pop()
+
+        for next_node in range(len(matrix)):
+            if matrix[node][next_node] == 1:
+                if not visit[next_node]:
+                    stack.append(next_node)
+                    visit[next_node] = True
+                    print("방문", next_node)
+
+
+amatrix = [
+    [0, 1, 1, 0, 0],
+    [1, 0, 1, 1, 0],
+    [1,1, 0, 0, 0],
+    [0, 1, 0, 0, 1],
+    [0, 0, 0, 1, 0]
+]
+DFS(amatrix, 0)
+
+
+def BFS(matrix):
+    c = [[False] * 5 for _ in range(5)]
+    visit = c[:]
+    queue = deque()
+    queue.append([0, 0])
+    visit[0][0] = True
+
+    switch = [[1, 0], [0, 1], [0, -1], [-1, 0]]
+    count = 1
+    while queue:
+        node = queue.popleft()
+        for next_node in range(4):
+            a = node[0] + switch[next_node][0]
+            b = node[1] + switch[next_node][1]
+
+            if a > 4 or b > 4 or a < 0 or b < 0:
+                pass
+            elif matrix[a][b] == 1:
+                if not visit[a][b]:
+                    queue.append([a, b])
+                    visit[a][b] = True
+        if visit[4][4] == True:
+            return count
+        print(queue)
+        count += 1
+    if visit[4][4] == False:
+        return -1
+amatrix = \
+    [[1,0,1,1,1],
+     [1,0,1,0,1],
+     [1,0,1,1,1],
+     [1,1,1,0,1],
+     [0,0,0,0,1]]
+print(BFS(amatrix))
+"""
