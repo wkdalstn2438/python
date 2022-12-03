@@ -1,0 +1,62 @@
+# import sys
+#
+# def floyd_wershall(N, matrix):
+#     v = N
+#     d = [[0] * (v) for _ in range(v)]
+#
+#     for u in range(len(matrix)):
+#
+#
+#         d[matrix[u][0]-1][matrix[u][1]-1] = 1
+#         d[matrix[u][1]-1][matrix[u][0]-1] = 1
+#
+#     for m in range(0, v):
+#         for x in range(0, v):
+#             for y in range(0, v):
+#                 if d[x][m] != 0 and d[m][y] != 0 and d[x][y] == 0:
+#                     d[x][y] = d[x][m] + d[m][y]
+#                     d[y][x] = d[x][m] + d[m][y]
+#     answer = []
+#     for i in range(len(d)):
+#         answer.append(sum(d[i]))
+#     print(answer.index(min(answer))+1)
+#
+#
+#
+#
+# inf = float('inf')
+#
+# N, M = map(int, sys.stdin.readline().split())
+# matrix = []
+#
+# for i in range(M):
+#     a, b = map(int, sys.stdin.readline().split())
+#     matrix.append([a,b])
+# asd = floyd_wershall(N, matrix)
+
+
+n, m = map(int, input().split())
+
+d = [[float('inf')] * (n+1) for _ in range(n + 1)]
+
+for _ in range(m):
+    x, y = map(int, input().split())
+    d[x][y] = 1
+    d[y][x] = 1
+    d[x][x] = d[y][y] = 0
+
+for m in range(1, n+1):
+    for x in range(1, n+1):
+        for y in range(1, n+1):
+            d[x][y] = min(d[x][y], d[x][m] + d[m][y])
+
+bacon = [sum(d[x][1:]) for x in range(1, n+1)]
+
+min_b = float('inf')
+min_num = 0
+for i, b in enumerate(bacon):
+    if b < min_b:
+        min_b = b
+        min_num = i + 1
+
+print(min_num)
