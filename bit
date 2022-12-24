@@ -1,0 +1,13 @@
+def solution(data, col, row_begin, row_end):
+    answer = 0
+    data.sort(key=lambda x: (x[col-1], -x[0]))
+    for i in range(len(data)):
+        if not row_begin <= i+1 <= row_end:
+            continue
+        si = 0
+        for n in data[i]:
+            si += n % (i+1)
+        answer ^= si
+    return answer
+
+print(solution([[2,2,6],[1,5,10],[4,2,9],[3,8,3]], 2, 2, 3))
