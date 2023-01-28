@@ -1,0 +1,79 @@
+#include <stdio.h>
+int main(void)
+{
+	int id, pass;
+
+	printf("아이디와 패스워드를 4개의 숫자로 입력하세요.");
+
+	printf("id: ____\b\b\b\b");
+	scanf("%d", &id);
+
+	printf("pass: ____\b\b\b\b");
+	scanf("%d", &pass);
+	printf("\a 입력된 아이디는 \"%d\"이고 패스워드는 \"%d\"입니다.", id, pass);
+}
+
+#include <stdio.h>
+int main(void)
+{
+	double v = 300000.0;
+	double s = 149600000;
+	int sec = s / v ;
+	int min = (double)sec / 60;
+	sec %= 60;
+
+	printf("빛의 속도는 %lfkm/s\n", v);
+	printf("태양과 지구와의 거리 %lfkm\n", s);
+	printf("도달 시간은 %d분 %d초\n", min, sec);
+
+	return 0;
+}
+
+#include <stdio.h>
+
+int main(void)
+{
+	int year;
+	int result;
+
+	
+	printf("연도를 입력하시오");
+	scanf("%d", &year);
+
+	result = (year % 4 == 0) && !(year % 100 == 0) | (year % 400 == 0);
+	printf("result= %d\n", result);
+	return 0;
+} 
+#include <stdio.h>
+
+int main(void)
+{
+	int x, y;
+
+	printf("첫번째 수=");
+	scanf("%d", &x);
+	printf("두번째 수=");
+	scanf("%d", &y);
+
+	printf("큰수=%d\n", (x > y) ? x : y);
+	printf("작은수=%d\n", (x < y) ? x : y);
+
+	return 0;
+}*/
+#include <stdio.h>
+
+int main(void)
+{
+	int argb = 0xFBFF5BF8;
+	unsigned char a, r, g, b;
+	a = (argb >> 24) & 0x000000FF;
+	r = (argb >> 16) & 0x000000FF;
+	g = (argb >> 8) & 0x000000FF;
+	b = argb & 0x000000FF;
+
+	printf("ARGB = 0x%08X\n", argb);
+	printf("A = 0x%02X(%d)\n", a, a);
+	printf("A = 0x%02X(%d)\n", r, r);
+	printf("A = 0x%02X(%d)\n", g, g);
+	printf("A = 0x%02X(%d)\n", b, b);
+}
