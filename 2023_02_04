@@ -1,0 +1,118 @@
+# include <stdio.h>
+
+int main(void)
+{
+	int a, c, d;
+	char b;
+
+	printf("수식을 입력하시오(예: 2 + 5) >>");
+	scanf("%d %c %d", &a, &b, &c);
+
+	if (b == '+')
+		d = a + c;
+	else if (b == '-')
+		d = a - c;
+	else if (b == '*')
+		d = a * c;
+	else if (b == '/')
+		d = a / c;
+	else
+		return -1;
+
+	printf("%d %c %d = %d", a,b,c,d);
+
+	return 0;
+}
+
+# include <stdio.h>
+
+int main(void)
+{
+	int number;
+
+	printf("정수를 입력하시오:");
+	scanf("%d", &number);
+	switch (number)
+	{
+		case 0:
+			printf("없음\n");
+			break;
+		case 1:
+			printf("하나\n");
+			break;
+		case 2:
+			printf("둘\n");
+			break;
+
+		default:
+			printf("많음\n");
+			break;
+	}
+}
+# include <stdio.h>
+
+int main(void)
+{
+	int a, c, d;
+	char b;
+
+	printf("수식을 입력하시오(예: 2 + 5) >>");
+	scanf("%d %c %d", &a, &b, &c);
+
+	switch (b)
+	{
+	case '+': d = a + c; break;
+	case '-': d = a - c; break;
+	case '*': d = a * c; break;
+	case '/': d = a / c; break;
+	case '&': d = a & c; break;
+	case '|': d = a | c; break;
+	case '^': d = a ^ c; break;
+
+	default: return 1;
+	}
+
+	printf("%d %c %d = %d", a,b,c,d);
+
+	return 0;
+}
+
+
+# include <stdio.h>
+
+int main(void)
+{
+	int n;
+	int result = 0;
+
+	scanf("%d", &n);
+	
+	result = (n + 1) * n / 2;
+
+	printf("%d\n", result);
+	return 0;
+}*/
+
+# include <stdio.h>
+
+int gcd_recur(int x, int y) {
+	if (y == 0) return x;
+	return gcd_recur(y, x % y);
+}
+
+int main(void)
+{
+	int x, y, r;
+
+	scanf("%d %d", &x, &y);
+
+	while (y != 0)
+	{
+		r = x % y;
+		x = y;
+		y = r;
+	}
+	printf("%d", x);
+
+	return 0;
+}
