@@ -1,0 +1,107 @@
+# include <stdio.h>
+# include <stdlib.h>
+# include <time.h>
+int main(void)
+{
+	int num;
+	int answer;
+	int count = 1;
+
+	srand((unsigned int)time(NULL));
+	answer = rand() % 100 + 1;
+
+	do {
+		printf("정답을 추측하여 보시오.");
+		scanf("%d", &num);
+
+		if (num < answer)
+			printf("제시된 정수가 낮습니다.\n");
+		else if (num == answer)
+		{ printf("축하합니다. 시도횟수=%d", count); break;}
+		else
+			printf("제시된 정수가 높습니다. \n");
+
+		count += 1;
+
+	} while (1);
+
+	return 0;
+}
+
+# include <stdio.h>
+
+int main(void)
+{
+	int i, sum;
+
+	sum = 0;
+
+	for (i = 1; i <= 10; i++)
+		sum += i;
+
+	printf("1부터 10까지 정수의 합 = %d\n", sum);
+
+	return 0;
+}
+
+# include <stdio.h>
+
+int main(void)
+{
+	int count = 0;
+	int a, b, c;
+
+	for (a = 1; a < 100; a++) {
+			for (b = 1; b < 100; b++) {
+				for (c = 1; c < 100; c++) {
+					if (a < b && a * a + b * b == c * c ){
+						printf("%d, %d, %d\n", a, b, c);
+						count += 1;
+					}
+				}
+			}
+	}
+	{
+		
+	}
+	printf("%d", count);
+	return 0;
+}
+
+#include <stdio.h>
+
+int mai(void) {
+	int a, b;
+	int count = 0;
+
+	for (a = 1; a <= 6; a++) {
+		for (b = 1; b <= 6; b++) {
+			if (a<= b && a + b == 6) {
+				printf("(%d, %d)\n", a, b);
+				count += 1;
+			}
+		}
+	}
+	printf("총 %d개", count);
+	return 0;
+}
+
+
+int main(void) {
+	int a, b, c;
+	int count = 0;
+
+	for (a = 1; a <= 6; a++) {
+		for (b = 1; b <= 6; b++) {
+			for (c = 1; c <= 6; c++) {
+
+			if (a <= b && b <= c && a + b + c == 10) {
+				printf("(%d, %d, %d)\n", a, b, c);
+				count += 1;
+				}
+			}
+		}
+	}
+	printf("총 %d개", count);
+	return 0;
+}*/
