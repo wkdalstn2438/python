@@ -1,0 +1,19 @@
+#include <stdio.h>
+
+int main(void)
+{
+	int c, i, u, n;
+	int score[100] = {0};
+	int average;
+	int sum = 0;
+
+	scanf("%d", &c);
+	for (i = 0; i < c; i++)
+	{
+ 		scanf("%d", &n);
+		scanf("%d", &score[i - 1]);
+	}
+	for (u = 0; u < c; u++)
+		printf("%d", score[u]);
+	return 0;
+}
