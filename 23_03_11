@@ -1,0 +1,23 @@
+// C++ code
+//
+#include <LiquidCrystal_I2C.h>
+
+LiquidCrystal_I2C lcd(32, 16, 2);
+LiquidCrystal_I2C lcd2(33, 16, 2);
+
+void setup()
+{
+  lcd.init();
+  lcd.backlight();
+  lcd.setCursor(0, 0);
+  lcd.print("Hello World");
+  
+  lcd2.init();
+  lcd2.backlight();
+  lcd2.setCursor(0, 0);
+  lcd2.print("Hello");
+}
+
+void loop()
+{
+}
