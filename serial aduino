@@ -1,0 +1,63 @@
+import time
+
+# 시리얼 통신에 필요한 모듈
+import serial
+
+# 그래프를 그리는데 필요한 모듈
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+import numpy as np
+
+# 시리얼 통신 연결
+com = serial.Serial(
+    port='COM6',    # 아두이노가 연결된 COM 포트
+    baudrate=9600,  # 통신속도 (초당 비트수)
+)
+
+# 새 연결 후 아두이노가 리부팅 되는 시간을 대기함
+time.sleep(5)   # 5초
+
+# 5초 후에 줄바꿈 문자를 포함한 start를 보냄
+com.write(b'start\n')
+
+# matplot 그래프 설정
+fig = plt.figure()
+ax = plt.axes(xlim=(0, 100), ylim=(0, 100))
+x, y1, y2, y3 = [0], [0], [0], [0]
+
+# 그래프 함수. 여기서 시리얼 값을 읽는다.
+def animate(i, x, y1, y2, y3):
+    if com.readable():
+        # 줄바꿈 문자를 기준으로 데이터를 한 줄씩 읽음
+        data = com.readline()
+        if not data:
+            return
+        data = data.decode('ascii')
+
+        # 습도, 온도, 미세먼지 값 분리
+        humi, temp, dust = map(float, data.split(','))
+
+        x.append(x[-1] + 1)
+
+        y1.append(humi)
+        y2.append(temp)
+        y3.append(dust)
+
+        x = x[-100:]
+        y1 = y1[-100:]
+        y2 = y2[-100:]
+        y3 = y3[-100:]
+
+        ax.clear()
+        ax.plot(x, y1)
+        ax.plot(x, y2)
+        ax.plot(x, y3)
+
+animation = FuncAnimation(
+    fig=fig,
+    func=animate,
+    fargs=(x, y1, y2, y3),
+    cache_frame_data=False,
+    interval=200
+)
+plt.show()
