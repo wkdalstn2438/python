@@ -1,0 +1,270 @@
+#include <LiquidCrystal_I2C.h>  // LCD 1602 I2C용 라이브러리
+#include "DHT.h"                // 온습도 센서 사용을 위한 라이브러리
+
+// ---------------------------------------------------------------------
+// LCD 제어 관련 코드들
+LiquidCrystal_I2C lcd(0x27, 16, 2);  // LCD 제어 객체 생성
+
+byte humi[8] = {
+  // 물컵모양 출력
+  0b00000,
+  0b10001,
+  0b10001,
+  0b10001,
+  0b11111,
+  0b11111,
+  0b11111,
+  0b11111,
+};
+byte temp[8] = {
+  // 온도계 모양 출력
+  0b00100,
+  0b01010,
+  0b01010,
+  0b01010,
+  0b01010,
+  0b10001,
+  0b11111,
+  0b01110,
+};
+byte char_temp[8] = {
+  // 온도 단위 출력
+  0b10000,
+  0b00110,
+  0b01001,
+  0b01000,
+  0b01000,
+  0b01000,
+  0b01001,
+  0b00110,
+};
+
+// LCD 초기화 함수
+void lcd_setup(){
+  lcd.init();
+  lcd.backlight();
+  lcd.createChar(1, temp);      // 1번에 온도계 아이콘 등록
+  lcd.createChar(2, humi);       // 2번에 물컵 아이콘 등록
+  lcd.createChar(3, char_temp); // 3번에 온도 단위 아이콘 등록
+
+  // LCD에 항상 그려져야 하는 문자들을 미리 그려놓음
+  // (clear) 함수를 사용안하고 수치 부분만 새로 그리면
+  // LCD의 깜빡거림 현상을 크게 줄일 수 있다.
+  lcd.setCursor(0,0);
+  lcd.write(byte(1));     // 온도계 아이콘 출력
+  lcd.setCursor(5, 0);
+  lcd.write(byte(3));     // 온도 단위 아이콘 출력
+  lcd.setCursor(8, 0);
+  lcd.write(byte(2));     // 물컵 아이콘 출력
+  lcd.setCursor(13, 0);
+  lcd.print("%");         // % 출력
+
+  lcd.setCursor(0, 1);
+  lcd.print("F.Dust");    // fine dust 문구 출력
+  lcd.setCursor(11, 1);
+  lcd.print("ug/m3");     // 단위 출력(마이크로그램/ 입방미터)
+}
+
+// LCD 출력 함수 (습도, 온도, 미세먼지)
+void lcd_print(int humi, int temp, float dust) {
+  // 출력 버퍼
+  char humi_buffer[4] = "";
+  char temp_buffer[4] = "";
+  char dust_buffer[6] = "";
+  char dust_str[6] = "";
+
+  // ---------- 온습도 출력 ----------
+  sprintf(humi_buffer, "%-2d", humi); // %-2d: 두칸 왼쪽정렬
+  sprintf(temp_buffer, "%-2d", temp);
+
+  lcd.setCursor(2, 0);
+  lcd.print(temp_buffer); // 온도값 출력
+  lcd.setCursor(10, 0);
+  lcd.print(humi_buffer);  // 습도값 출력
+
+  // ---------- 미세먼지 출력 ----------
+  // 실수를 문자열로 바꾸는 함수 dtostrf(실수값, 정수부 길이, 소수부 길이, 문자열 버퍼)
+  dtostrf(dust, 3, 1, dust_str);
+  sprintf(dust_buffer, "%5s", dust_str);
+
+  lcd.setCursor(6, 1);
+  lcd.print(dust_buffer);  // 미세먼지 값 출력
+}
+
+/******************************************
+* 온습도 센서 제어 관련 코드들
+*/
+#define DHT_PIN A1      // 온습도 센서 아날로그 핀번호
+#define DHT_TYPE DHT11  // 온습도 센서 DHT 타입 지정
+
+DHT dht(DHT_PIN, DHT_TYPE); // 온습도 센서 제어 객체 생성
+
+// 온습도센서 초기화 함수
+void dht_setup(){
+  dht.begin();
+}
+
+
+/*****************************************
+* 미세먼지 센서 제어 관련 코드들
+*/
+#define DUST_PIN    A0    // 미세먼지 센서 아날로그 핀번호 (미세먼지 값 수신)
+#define DUST_LED_PIN 12   // 미세먼지 센서 적외선 LED 디지털 핀번호 (미세먼지 측정)
+
+#define DUST_SAMPLE_TIME 280  // 적외선을 키고 미세먼지 측정하는데 걸리는 샘플링 시간
+#define DUST_WAIT_TIME  40    // 미세먼지 측정 후 적외선을 끄기전에 대기하는 시간
+#define DUST_STOP_TIME 9680   // 다시 적외선을 키기 전까지 대기하는 시간
+
+float dust_slot[5] = {0};   // 측정된 미세먼지 값들을 저장할 슬롯
+float dust_initial = 0;    // 초기 측정된 미세먼지 값
+
+// 미세먼지 센서 초기화 함수
+void dust_setup() {
+  pinMode(DUST_LED_PIN, OUTPUT); // 미세먼지 센서 적외선 핀을 출력 모드로 설정
+
+  // 미세먼지 초기값 측정을 시작 (총 5번)
+  float dust_sum = 0;
+  for  (int i = 0; i < 5; i++){
+    digitalWrite(DUST_LED_PIN, LOW);      // 1. 적외선을 킨다.
+    delayMicroseconds(DUST_SAMPLE_TIME);  // 2. 280 마이크로초 동안 미세먼지 값이 측정(계산)되기를 기다린다.
+    dust_sum += analogRead(DUST_PIN);     // 3. 측정값을 읽어온다.
+    delayMicroseconds(DUST_WAIT_TIME);  // 4. 적외선을 끄기 전에 40 마이크로초 동안 대기한다.
+    digitalWrite(DUST_LED_PIN, HIGH);     // 5. 적외선을 끈다.
+    delayMicroseconds(DUST_STOP_TIME);  // 6. 다음 재 측정까지 9680 마이크로초(9.68 밀리초)동안 대기한다.
+  }
+  dust_initial = (((dust_sum / 5) * 5.0 ) / 1024.0); // 5번 측정된 미세먼지 값의 평균치를 계산한다.
+}
+
+// 미세먼지 값 읽기 함수
+float dust_read() {
+  // 미세먼지 값 읽기
+  digitalWrite(DUST_LED_PIN, LOW);
+  delayMicroseconds(DUST_SAMPLE_TIME);
+  float dust_value = analogRead(DUST_PIN);
+  delayMicroseconds(DUST_WAIT_TIME);
+  digitalWrite(DUST_LED_PIN, HIGH);
+  delayMicroseconds(DUST_STOP_TIME);
+
+  // 마지막 슬롯에 최근값 저장
+  dust_slot[4] = ((dust_value * (5.0 / 1024)) - dust_initial) / 0.005;
+
+  // 슬롯의 모든 미세먼지 값을 합산
+  float total_dust = 0;
+  total_dust = dust_slot[4];
+  for (int i = 0; i < 4; i++) {
+    total_dust += dust_slot[i];
+    // 최근 저장딘 마지막 슬롯을 제외한 나머지는 한칸씩 앞으로 땡긴다.
+    // (즉, 가장 나중에 측정된 값은 버린다.)
+    dust_slot[i] = dust_slot[i + 1];
+  }
+  
+  // 5개 슬롯에 모두 값이 있는 상태라면
+  // 미세먼지 평균 값을 반환한다.
+
+  if(dust_slot[0] != 0) {
+    return total_dust / 5;
+  }
+  // 아니라면 0을 반환
+  else {
+    return 0;
+  }
+}
+
+/****************************************
+* LED 모듈 제어 관련 코드들
+*/
+#define LED_R_PIN 5   // LED 묘듈 RED 핀번호
+#define LED_G_PIN 6   // LED 모듈 GREEN 핀번호
+#define LED_B_PIN 7   // LED 모듈 BLUE 핀번호
+
+// LED 모듈 초기화 함수
+void led_setup() {
+  pinMode(LED_R_PIN, OUTPUT);
+  pinMode(LED_G_PIN, OUTPUT);
+  pinMode(LED_B_PIN, OUTPUT);
+}
+
+// LED 모듈 불빛 색상 조절 함수
+void led_set_color(byte red, byte green, byte blue) {
+  analogWrite(LED_R_PIN, red);
+  analogWrite(LED_G_PIN, green);
+  analogWrite(LED_B_PIN, blue);
+}
+
+// 미세먼지 값을 입력받아 LED의 불빛을 조절하는 함수
+void led_dust_level(float dust) {
+  if (dust <= 30.0)
+  led_set_color(0, 0, 255);  // 파란색 (미세먼지 상태 좋음)
+  else if (dust <= 80.0)
+  led_set_color(0, 255, 0);  // 초록색 (미세먼지 상태 보통)
+  else if (dust < 150.0)
+  led_set_color(255, 80, 1); // 노란색 (미세먼지 상태 나쁨)
+  else
+  led_set_color(255, 0, 0);  // 빨간색(미세먼지 상태 매우 나쁨)
+}
+
+
+
+/**************************************************
+* (MAIN) setup과 loop 함수 그리고 시리얼 입출력 함수
+*/
+
+// 시리얼 포트로 "start"라는 값이 들어오기 전까지
+// 루프를 돌며 대기하는 함수
+bool isRun = false;
+void serial_wait_start() {
+  while(!isRun) {
+    // 시리얼 포트엣 값을 읽을 수 있는 상태라면
+    if (Serial.available()) {
+      int i = 0;
+      char buffer[32] = "";
+
+      // 줄바꿈 문자를 만나기 전까지 한 바이트씩 읽는다.
+      do {
+        buffer[i] = Serial.read();
+      } while (buffer[i++] != '\n');
+      buffer[i - 1] = 0; // 마지막응로 들어온 줄바꿈 문자는 지운다.
+
+      // 입력받은 문자열이 start라면 동작상태로 전환한다.
+      if (strcmp(buffer, "start") == 0)
+        isRun = true;
+    }
+    delay(1000);
+  }
+}
+
+// CSV(Comma Seperated Variables) 형식으로 시리얼 포트에
+// 습도, 온도, 미세먼지 수치를 전송한다.
+// => ex) 24, 45, 86.0
+void serial_send_data(int humi, int temp, float dust) {
+  char buffer[64] = "";
+  char dust_str[9] = "";
+
+  dtostrf(dust, 4, 3, dust_str);
+  sprintf(buffer, "%d,%d,%s\n", humi, temp, dust_str);
+  Serial.print(buffer);
+}
+
+void setup() {
+  Serial.begin(9600);   // 시리얼 통신 초기화
+
+  lcd_setup();   // LCD 초기화
+  dht_setup();    // 온습도 센서 초기화
+  dust_setup();   // 미세먼지 센서 초기화
+  led_setup();    // LED 모듈 초기화
+}
+
+void loop() {
+
+  serial_wait_start();  // 여기서 "start" 입력을 대기(이후에는 정지하지 않음)
+
+  int humi = dht.readHumidity();      // 습도값 읽기
+  int temp = dht.readTemperature();   // 온도값 읽기
+  float dust = dust_read();
+
+  lcd_print(humi, temp, dust);  // LCD에 온습도 및 미세먼지 값 출력
+  led_dust_level(dust);         // LED로 미세먼지 상태를 알림
+  serial_send_data(humi, temp, dust); // 시리얼 포트로 데이터를 전송함
+
+  delay(200);
+}
