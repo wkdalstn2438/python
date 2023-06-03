@@ -1,0 +1,32 @@
+import heapq
+import sys
+
+V, E = map(int, sys.stdin.readline().split())
+K = int(sys.stdin.readline())
+L = [[] for _ in range(V + 1)]
+
+for i in range(E):
+    u, v, w = map(int, sys.stdin.readline().split())
+    L[u].append((v, w))
+
+dist = [float("inf")] * (V + 1)
+visit = [False] * (V + 1)
+pq = []
+heapq.heappush(pq, (0, K))
+dist[K] = 0
+
+while pq:
+    cost, node = heapq.heappop(pq)
+
+    if visit[node]:
+        continue
+
+    visit[node] = True
+
+    for n_node, n_cost in L[node]:
+        if dist[n_node] > n_cost + cost:
+            dist[n_node] = n_cost + cost
+            heapq.heappush(pq, (dist[n_node], n_node))
+
+for i in dist[1:]:
+    print(i if i < float('inf') else "INF")
