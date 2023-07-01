@@ -1,0 +1,50 @@
+"""
+def make_counter(x):
+    cnt = x-1
+
+    def counter():
+        nonlocal cnt
+        cnt += 1
+
+        return cnt
+
+    return counter
+
+
+counter_1 = make_counter(4)
+
+print(counter_1())
+print(counter_1())
+print(counter_1())
+
+counter_2 = make_counter(1)
+print(counter_2())
+print(counter_2())
+"""
+
+def make_partial(func, fix=()):
+    def partial(*inputs):
+        i = 0
+        arg_list = []
+        for fixed_arg in fix:
+            if fixed_arg is not None:
+                arg_list.append(fixed_arg)
+            else:
+                arg_list.append(inputs[i])
+                i += 1
+        return func(*arg_list)
+
+    return partial
+
+def pow(x, n):
+    return x ** n
+
+square = make_partial(pow, (None, 2))
+print(square(1))
+
+
+sqrt = make_partial(pow, (None, -1/2))
+print(sqrt(4))
+
+cubicroot = make_partial(pow, (None, 1/3))
+print(cubicroot(1))
