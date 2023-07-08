@@ -1,0 +1,38 @@
+class Person:
+    def __init__(self, name, pid, address):
+        self.name = name
+        self.pid = pid
+        self.address = address
+    
+    
+    def get_name(self):
+        return self.name
+    
+    
+    def set_name(self, name):
+        self.name = name
+    
+    
+    def get_age(self):
+        a = int(self.pid[0]) * 10 + int(self.pid[1])
+        if self.pid[7] > 2:
+            return 2023 - 2000+a
+        else:
+            return 2023 - 1900 + a
+        
+        
+    
+    def get_gender(self):
+        a = self.pid[7]
+        if a // 2 == 0:
+            return "F"
+        else:
+            return "M"
+        
+        
+    def get_address(self, address):
+        return self.address   
+    
+    
+    def set_address(self, address):
+        self.address = address
