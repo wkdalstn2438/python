@@ -1,0 +1,53 @@
+class Node:
+    def __init__(self, data, link=None):
+        self.data = data
+        self.link = link
+class MyList:
+    def __init__(self, *datas):
+        self.length = 0
+        self.head = None
+        self.tail = None
+
+        for data in datas:
+            self.append(data)
+
+    def append(self, data):
+        node = Node(data)
+
+        if self.head is None:
+            self.head = node
+            self.tail = node
+
+        else:
+            self.tail.link = node
+            self.tail = node
+
+        self.length += 1
+
+    def __str__(self):
+        result = "<"
+        curr = self.head
+
+        while curr is not None:
+            result += str(curr.data)
+            if curr.link is not None:
+                result += ", "
+            curr = curr.link
+        result += ">"
+        return result
+
+    def __iter__(self):
+        def generator():
+            curr = self.head
+            while curr is not None:
+                yield curr.data
+                curr = curr.link
+        return generator()
+
+    def __len__(self):
+        return self.length
+
+
+mylist = MyList(1, 2, 3, 4)
+for item in mylist:
+    print(item)
