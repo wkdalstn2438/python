@@ -1,0 +1,21 @@
+def solution(X, Y):
+    answer = ''
+    x = list(X)
+    y = list(Y)
+    dic = {}
+    for i in range(10):
+        dic[i] = min(x.count(str(i)), y.count(str(i)))
+
+    print(dic)
+    
+    """
+    if tmp.count(0) == len(tmp) and len(tmp) != 0:
+        tmp = [0]
+    for i in tmp:
+        answer += str(i)
+    if answer == '':
+        answer = "-1"
+    """
+    return answer
+
+print(solution("12321", "42531"))
