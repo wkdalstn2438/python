@@ -1,0 +1,29 @@
+def time_count(t):
+    return int(t.split(':')[0]) * 60 + int(t.split(':')[1])
+
+def change_melody(x):
+    exc = {'C#': 'H', 'D#': 'I', 'E': 'J', 'F#': 'k', 'G#': 'L', 'A#': 'M', 'B#': 'N'}
+    
+    for k, v in exc.items():
+        x = x.replace(k, v)
+    return x
+
+def solution(m, musicinfos):
+    answer = []
+    for info in musicinfos:
+        info = info.split(',')
+        info[3] = change_melody(info[3])
+        t = time_count(info[1]) - time_count(info[0])
+
+        if t >= len(info[3]):
+            music = info[3] * (t // len(info[3])) + info[3][:t % len(info[3])]
+        else:
+            music = info[3][:t]
+
+        if change_melody(m) in music:
+            answer.append([t, info[2]])
+
+    if len(answer) == 0:
+        return '(None)'
+    else:
+        return sorted(answer, key=lambda x: -x[0])[0][1]
