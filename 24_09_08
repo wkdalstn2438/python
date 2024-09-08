@@ -1,0 +1,20 @@
+def solution(diffs, times, limit):
+    level = 0
+    count = 0
+    while True:
+        for i in range(len(diffs)):
+            if diffs[i] <= level:
+                count += times[i]
+            else:
+                count += sum(times[0:i]) * 2
+                count += times[i]
+        if count > limit:
+            level += 1
+            count = 0
+        else:
+            print(count)
+            break
+    return level
+
+
+print(solution([1, 5, 3],	[2, 4, 7],	30))
