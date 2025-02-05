@@ -1,0 +1,97 @@
+import cv2
+import pyautogui
+import time
+import webbrowser
+import pyperclip
+
+def open_camera():
+    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # DirectShow 방식으로 카메라 호출
+
+    if not cap.isOpened():
+        print("Error: 카메라를 열 수 없습니다.")
+        return None
+
+    return cap
+
+
+def chat_ai():
+    # 1. 마우스를 파일 위치로 이동 (위치는 직접 조정 필요)
+    upload_button_x, upload_button_y = 130, 270  # 실제 위치 확인 후 변경
+
+    pyautogui.moveTo(upload_button_x, upload_button_y, duration=1)
+    pyautogui.click()  # 클릭하여 파일 열기
+
+    # 2. 파일 경로 입력 (파일 선택창에서 직접 입력)
+    time.sleep(1)  # 파일 선택창 대기
+    pyautogui.hotkey("ctrl", 'c')  # 클립보드에 파일 경로 복사
+    # 3. ChatGPT 웹페이지 열기
+    webbrowser.open("https://chatgpt.com/c/67a2e1da-5b04-8012-b90c-9346c4dc0469")
+    time.sleep(1)
+    pyautogui.moveTo(677, 865, duration=1)
+    time.sleep(1)
+    pyautogui.click()
+    pyautogui.hotkey("ctrl", "v")  # 파일 경로 붙여넣기
+    pyautogui.press("enter")  # 파일 업로드 실행
+
+    # 4. 질문 입력
+    time.sleep(3)  # 업로드 완료 대기
+    pyperclip.copy("사진의 책에 대한 설명을 적어줘.")  # 질문 복사
+    pyautogui.hotkey("ctrl", "v")  # 입력창에 붙여넣기
+    time.sleep(0.1)
+    pyautogui.press("enter")  # 질문 실행
+
+
+def show_camera_feed():
+    cap = open_camera()
+    if cap is None:
+        return
+
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            print("Error: 프레임을 가져올 수 없습니다. 다시 시도합니다.")
+            for _ in range(3):  # 최대 3번까지 재시도
+                time.sleep(0.5)
+                ret, frame = cap.read()
+                if ret:
+                    break
+            if not ret:
+                print("Error: 지속적인 프레임 획득 실패, 프로그램 종료")
+                break
+
+        cv2.imshow('Camera Feed', frame)
+
+        key = cv2.waitKey(1) & 0xFF
+        if key == ord('s'):
+            capture_and_save_image(cap)  # 이미 열린 카메라 객체를 재사용
+            chat_ai()
+
+
+        elif key == ord('q'):
+            print("프로그램 종료")
+            break
+
+    cap.release()
+    cv2.destroyAllWindows()
+
+
+def capture_and_save_image(cap, filename="captured_image.jpg"):
+    ret, frame = cap.read()
+    if ret:
+        cv2.imwrite(filename, frame)
+        print(f"이미지 저장 완료: {filename}")
+    else:
+        print("Error: 이미지 저장 실패")
+
+
+def main():
+    print("카메라 화면을 보면서 's' 키를 눌러 사진을 저장하세요. 종료하려면 'q' 키를 누르세요.")
+    x, y = pyautogui.position()
+    print(f"현재 마우스 위치: ({x}, {y})")
+    show_camera_feed()
+
+
+
+print("✅ 자동 업로드 및 질문 완료!")
+if __name__ == "__main__":
+    main()
