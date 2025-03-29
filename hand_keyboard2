@@ -1,0 +1,159 @@
+import cv2
+import numpy as np
+from cvzone.HandTrackingModule import HandDetector
+from PIL import ImageFont, ImageDraw, Image
+
+# 텍스트 줄바꿈 함수
+def wrap_text(text, max_chars_per_line=30):
+    lines = []
+    for line in text.split('\n'):
+        while len(line) > max_chars_per_line:
+            lines.append(line[:max_chars_per_line])
+            line = line[max_chars_per_line:]
+        lines.append(line)
+    return lines
+
+# 텍스트 저장 함수 (텍스트가 변경될 때만 저장)
+def save_text(text, filename="note.txt"):
+    if not hasattr(save_text, "last_text") or save_text.last_text != text:
+        with open(filename, "w", encoding="utf-8") as f:
+            f.write(text)
+        save_text.last_text = text
+
+# 한글 폰트 로드 (Windows 기준)
+korean_font_path = "C:/Windows/Fonts/malgun.ttf"
+korean_font = ImageFont.truetype(korean_font_path, 32)
+
+# 버튼 클래스
+class Button():
+    def __init__(self, pos, text, size=(80, 80)):
+        self.pos = pos
+        self.text = text
+        self.size = size
+
+    def draw(self, img):
+        x, y = self.pos
+        w, h = self.size
+
+        overlay = img.copy()
+        cv2.rectangle(overlay, (x, y), (x + w, y + h), (255, 255, 255), cv2.FILLED)
+        cv2.addWeighted(overlay, 0.3, img, 0.7, 0, img)
+        cv2.rectangle(img, (x, y), (x + w, y + h), (150, 150, 150), 2)
+
+        cv2.putText(img, self.text, (x + 10, y + 55), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
+        return img
+
+# 키보드 배열
+def get_keys(mode):
+    return {
+        "ABC": [
+            ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
+            ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
+            ["Z", "X", "C", "V", "B", "N", "M"],
+            ["space", "del", "clear", "enter", "SYM", "NUM"]
+        ],
+        "NUM": [
+            ["1", "2", "3"],
+            ["4", "5", "6"],
+            ["7", "8", "9"],
+            ["0", "space", "del", "clear", "enter", "ABC", "SYM"]
+        ],
+        "SYM": [
+            ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")"],
+            ["_", "-", "+", "=", "[", "]", "{", "}", "\\"],
+            [";", ":", "\"", "`", "<", ">", "/", "?", "|"],
+            ["space", "del", "clear", "enter", "ABC", "NUM"]
+        ]
+    }[mode]
+
+def get_button_list(mode):
+    keys = get_keys(mode)
+    return [Button((60 + c * 100, 220 + r * 100), k)
+            for r, row in enumerate(keys) for c, k in enumerate(row)]
+
+# 초기값
+current_mode = "ABC"
+text_output = ""
+click_delay = 10
+click_counter = 0
+click_ready = True
+
+cap = cv2.VideoCapture(0)
+cap.set(3, 1280)
+cap.set(4, 720)
+
+detector = HandDetector(detectionCon=0.75, maxHands=1)
+button_list = get_button_list(current_mode)
+
+import time
+prev_time = time.time()
+while True:
+    success, img = cap.read()
+    img = cv2.flip(img, 1)
+    # 손 인식 ROI 제한
+    roi = img[100:600, 200:1000]
+    hands, _ = detector.findHands(roi, draw=False)
+
+    # 텍스트 출력창 (OpenCV 방식)
+    overlay = img.copy()
+    cv2.rectangle(overlay, (50, 20), (1230, 200), (255, 255, 255), cv2.FILLED)
+    cv2.addWeighted(overlay, 0.9, img, 0.1, 0, img)
+    if not hasattr(wrap_text, 'last_text') or wrap_text.last_text != text_output:
+        wrap_text.last_text = text_output
+        lines = wrap_text(text_output)
+    for i, line in enumerate(lines[:4]):
+        y = 60 + i * 35
+        cv2.putText(img, line, (70, y), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 0, 0), 2)
+
+    for button in button_list:
+        img = button.draw(img)
+
+    if hands:
+        offset_x, offset_y = 200, 100
+        lmList = [[pt[0] + offset_x, pt[1] + offset_y] for pt in hands[0]["lmList"]]
+        l, _, _ = detector.findDistance(lmList[4][:2], lmList[8][:2], img)
+
+        if click_counter > 0:
+            click_counter -= 1
+        else:
+            click_ready = True
+
+        for button in button_list:
+            x, y = button.pos
+            w, h = button.size
+            finger_x, finger_y = lmList[8][0], lmList[8][1]  # 전체 프레임 기준 좌표
+            if x < finger_x < x + w and y < finger_y < y + h:
+                if l < 50 and click_ready:
+                    cv2.rectangle(img, (x, y), (x + w, y + h), (100, 255, 100), cv2.FILLED)
+                    cv2.putText(img, button.text, (x + 10, y + 60), cv2.FONT_HERSHEY_PLAIN, 3, (0, 0, 0), 3)
+
+                    if button.text == "del":
+                        text_output = text_output[:-1]
+                    elif button.text == "space":
+                        text_output += " "
+                    elif button.text == "clear":
+                        text_output = ""
+                    elif button.text == "enter":
+                        text_output += "\n"
+                    elif button.text in ["ABC", "SYM", "NUM"]:
+                        current_mode = button.text
+                        button_list = get_button_list(current_mode)
+                    else:
+                        text_output += button.text
+
+                    save_text(text_output)
+                    click_ready = False
+                    click_counter = click_delay
+
+    # FPS 표시
+    current_time = time.time()
+    elapsed = current_time - prev_time if current_time != prev_time else 1e-6
+    fps = 1 / elapsed
+    prev_time = current_time
+    cv2.putText(img, f"FPS: {fps:.1f}", (20, 700), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+    cv2.imshow("Virtual Keyboard", img)
+    if cv2.waitKey(1) & 0xFF == 27:
+        break
+
+cap.release()
+cv2.destroyAllWindows()
