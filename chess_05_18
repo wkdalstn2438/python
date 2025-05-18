@@ -1,0 +1,291 @@
+# 좌표 변환 유틸
+def algebra_to_index(pos: str):
+    file = pos[0].lower()
+    rank = int(pos[1])
+    x = ord(file) - ord('a')
+    y = rank - 1
+    return x, y
+
+def index_to_algebra(x: int, y: int):
+    return f"{chr(ord('a') + x)}{y + 1}"
+
+# 3개
+# 프로모션(폰이 끝까지 같을때 킹 제외 원하는 기물로 변경)
+# 캐슬링(왕 룩의 위치를 바꿈)
+# 앙파상(상대폰을 먹으면서 대각 전진)
+class Piece:
+    def __init__(self, color):
+        self.color = color
+
+    def symbol(self):
+        raise NotImplementedError
+
+    def valid_moves(self, board, x, y):
+        raise NotImplementedError
+
+
+class King(Piece):
+    def symbol(self):
+        return 'K' if self.color == 'white' else 'k'
+
+    def valid_moves(self, board, x, y):
+        directions = [(-1, -1), (-1, 0), (-1, 1),
+                      (0,  -1),          (0,  1),
+                      (1,  -1), (1,  0), (1,  1)]
+        moves = []
+        for dx, dy in directions:
+            nx, ny = x + dx, y + dy
+            if board.in_bounds(nx, ny):
+                target = board.grid[nx][ny]
+                if target is None or target.color != self.color:
+                    moves.append((nx, ny))
+        return moves
+
+
+class Queen(Piece):
+    def symbol(self):
+        return 'Q' if self.color == 'white' else 'q'
+
+    def valid_moves(self, board, x, y):
+        moves = []
+        directions = [  # 총 8방향
+            (-1, 0), (1, 0), (0, -1), (0, 1),       # 상하좌우
+            (-1, -1), (-1, 1), (1, -1), (1, 1)      # 대각선
+        ]
+
+        for dx, dy in directions:
+            nx, ny = x + dx, y + dy
+            while board.in_bounds(nx, ny):
+                target = board.grid[nx][ny]
+                if target is None:
+                    moves.append((nx, ny))
+                elif target.color != self.color:
+                    moves.append((nx, ny))
+                    break
+                else:
+                    break
+                nx += dx
+                ny += dy
+
+        return moves
+
+
+class Rook(Piece):
+    def symbol(self):
+        return 'R' if self.color == 'white' else 'r'
+    # 조건 1: 상대기물이 있으면 그 위치까지만 이동 가능
+    # 조건 2: 우리팀 기물이 있으면 그 앞까지만 이동 가능
+    def valid_moves(self, board, x, y):
+        moves = []
+        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # 좌, 우, 하, 상
+
+        for dx, dy in directions:
+            nx, ny = x + dx, y + dy
+            while board.in_bounds(nx, ny):
+                target = board.grid[nx][ny]
+                if target is None:
+                    moves.append((nx, ny))
+                elif target.color != self.color:
+                    moves.append((nx, ny))
+                    break  # 상대 기물은 잡을 수 있지만 그 이후는 못 감
+                else:
+                    break  # 아군 기물 있으면 거기서 멈춤
+                nx += dx
+                ny += dy
+
+        return moves
+
+
+class Bishop(Piece):
+    def symbol(self):
+        return 'B' if self.color == 'white' else 'b'
+
+    def valid_moves(self, board, x, y):
+        moves = []
+        directions = [(-1, -1), (-1, 1), (1, -1), (1, 1)]  # 좌하, 좌상, 우하, 우상
+
+        for dx, dy in directions:
+            nx, ny = x + dx, y + dy
+            while board.in_bounds(nx, ny):
+                target = board.grid[nx][ny]
+                if target is None:
+                    moves.append((nx, ny))
+                elif target.color != self.color:
+                    moves.append((nx, ny))
+                    break  # 적 기물 있으면 거기까지 이동하고 종료
+                else:
+                    break  # 아군 기물이면 막힘
+                nx += dx
+                ny += dy
+
+        return moves
+
+
+class Knight(Piece):
+    def symbol(self):
+        return 'N' if self.color == 'white' else 'n'
+# 현재 위치에서 이동할수있는 칸[리스트]를 넘겨주는 함수
+    def valid_moves(self, board, x, y):
+        moves = []
+        directions = [
+            (-2, -1), (-2, 1),
+            (-1, -2), (-1, 2),
+            (1, -2),  (1, 2),
+            (2, -1),  (2, 1)
+        ]
+
+        for dx, dy in directions:
+            nx, ny = x + dx, y + dy
+            if board.in_bounds(nx, ny):
+                target = board.grid[nx][ny]
+                if target is None or target.color != self.color:
+                    moves.append((nx, ny))
+
+        return moves
+
+
+class Pawn(Piece):
+    def symbol(self):
+        return 'P' if self.color == 'white' else 'p'
+
+    def valid_moves(self, board, x, y):
+        moves = []
+        direction = 1 if self.color == 'white' else -1
+        start_row = 1 if self.color == 'white' else 6
+
+        # 한 칸 전진
+        if board.in_bounds(x, y + direction) and board.grid[x][y + direction] is None:
+            moves.append((x, y + direction))
+
+            # 첫 수일 때 두 칸 전진
+            if y == start_row and board.grid[x][y + 2 * direction] is None:
+                moves.append((x, y + 2 * direction))
+
+        # 대각선 공격
+        for dx in [-1, 1]:
+            nx, ny = x + dx, y + direction
+            if board.in_bounds(nx, ny):
+                target = board.grid[nx][ny]
+                if target and target.color != self.color:
+                    moves.append((nx, ny))
+
+        return moves
+
+
+
+class Board:
+    def __init__(self):
+        self.grid = [[None for _ in range(8)] for _ in range(8)]
+        self.setup()
+
+    def setup(self):
+        # 기본 기물 순서
+        piece_order = [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook]
+
+        # 1, 8랭크: 백과 흑 기물 배치
+        for x, piece_cls in enumerate(piece_order):
+            self.grid[x][0] = piece_cls('white')  # 1 rank
+            self.grid[x][7] = piece_cls('black')  # 8 rank
+
+        # 2, 7랭크: 폰 배치
+        for x in range(8):
+            self.grid[x][1] = Pawn('white')  # 2 rank
+            self.grid[x][6] = Pawn('black')  # 7 rank
+
+    def display(self):
+        print("  a b c d e f g h")
+        for y in reversed(range(8)):
+            row = f"{y+1} "
+            for x in range(8):
+                piece = self.grid[x][y]
+                row += piece.symbol() if piece else '.'
+                row += ' '
+            print(row)
+        print()
+
+    def in_bounds(self, x, y):
+        return 0 <= x < 8 and 0 <= y < 8
+
+
+class Game:
+    def __init__(self):
+        self.board = Board()
+        self.turn = 'white'
+        self.running = True
+
+    def move(self, x1, y1, x2, y2):
+        if not self.is_valid_move(x1, y1, x2, y2):
+            return
+
+        self.make_move(x1, y1, x2, y2)
+        self.check_win(x2, y2)
+        self.handle_promotion(x2, y2)
+        self.switch_turn()
+
+    def is_valid_move(self, x1, y1, x2, y2):
+        if not self.board.in_bounds(x1, y1) or not self.board.in_bounds(x2, y2):
+            print("❌ Invalid coordinates")
+            return False
+
+        piece = self.board.grid[x1][y1]
+        if not piece:
+            print("❌ No piece at start position")
+            return False
+        if piece.color != self.turn:
+            print("❌ Not your turn")
+            return False
+
+        valid = piece.valid_moves(self.board, x1, y1)
+        if (x2, y2) not in valid:
+            print("❌ Invalid move for that piece")
+            return False
+
+        return True
+
+    def make_move(self, x1, y1, x2, y2):
+        piece = self.board.grid[x1][y1]
+        self.board.grid[x2][y2] = piece
+        self.board.grid[x1][y1] = None
+
+    def check_win(self, x, y):
+        target = self.board.grid[x][y]
+        if isinstance(target, King):
+            print(f"🏁 {self.turn} wins! {target.color} King captured.")
+            self.running = False
+
+    def handle_promotion(self, x, y):
+        piece = self.board.grid[x][y]
+        if isinstance(piece, Pawn):
+            final_rank = 7 if piece.color == 'white' else 0
+            if y == final_rank:
+                while True:
+                    choice = input("Promote to (Q, R, B, N): ").strip().upper()
+                    if choice in ('Q', 'R', 'B', 'N'):
+                        break
+                    print("❌ Invalid choice. Choose from Q, R, B, N.")
+
+                promoted = {'Q': Queen, 'R': Rook, 'B': Bishop, 'N': Knight}[choice]
+                self.board.grid[x][y] = promoted(piece.color)
+                print(f"{self.turn}'s pawn promoted to {choice} at {index_to_algebra(x, y)}!")
+
+    def switch_turn(self):
+        self.turn = 'black' if self.turn == 'white' else 'white'
+
+
+    def start(self):
+        while self.running:
+            self.board.display()
+            print(f"{self.turn}'s turn. (e.g., e2 e4)")
+            try:
+                user_input = input("Move: ").strip()
+                pos1, pos2 = user_input.split()
+                x1, y1 = algebra_to_index(pos1)  # e -> 5
+                x2, y2 = algebra_to_index(pos2)
+                self.move(x1, y1, x2, y2)
+            except Exception as e:
+                print("❌ Invalid input format. Use format like 'e2 e4'")
+
+
+# 실행
+if __name__ == "__main__":
+    Game().start()
