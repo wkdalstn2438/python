@@ -1,0 +1,112 @@
+# 필수: 블럭 7종류, 다음 블럭 박스, 점수, 맵(10*20)
+# 부가: 레벨(속도 오름), 홀드 박스, 스핀 등등
+import time
+
+# 1. 블록은 총 7종류로 랜덤으로 결정된다.
+# 2. 블록이 위에서 아래로 자동으로 내려온다(아래 방향키 누르면 빠르게 내려옴).
+# 3. 블록이 아래에 닿지 않으면 이동, 회전이 가능하다.
+# 4. 블록이 바닥 or 가장 위의 블럭에 닿으면 새로운 랜덤한 블럭(다음 블럭 박스에 표시)이 위에 생긴다.
+# 5. 블록이 가로로 한줄이 완성되면 그 줄이 사라지고 점수가 오른다.
+# 6. 블록이 가장 윗줄에 있으면 게임이 종료된다.
+
+
+# pygame을 실행 맵 적용(O)
+# 블록을 만들고 화면에 출력(O)
+# 블록이 자동 낙하(키 누르면 빠르게 낙하) (O)
+# 블록 이동, 회전
+# 충돌 판정 및 블록 고정
+# 새로운 블럭 생성
+# 줄 삭제
+# 게임 오버 점수 표시
+
+import pygame
+import sys
+import random
+
+
+# ===================setting==========================
+BLOCK_SIZE = 30
+BOARD_WIDTH = 10
+BOARD_HEIGHT = 20
+
+SCREEN_WIDTH = BLOCK_SIZE * BOARD_WIDTH
+SCREEN_HEIGHT = BLOCK_SIZE * BOARD_HEIGHT
+
+color = {'BLACK': (0, 0, 0), 'GRAY': (50, 50, 50), 'WHITE': (200, 200, 200), 'CYAN': (0, 230, 230)}
+
+DROP_INTERVAL = 0.5  # 낙하 간격
+# ==============Tetromino 클래스===================
+class Tetromino:
+    def __init__(self, x, y, shape, color):
+        self.x = x
+        self.y = y
+        self.shape = shape
+        self.color = color
+
+    def draw(self, surface):
+        for row_idx, row in enumerate(self.shape):
+            for cal_idx, cell in enumerate(row):
+                if cell:
+                    px = (self.x + cal_idx) * BLOCK_SIZE
+                    py = (self.y + row_idx) * BLOCK_SIZE
+                    rect = pygame.Rect(px, py, BLOCK_SIZE, BLOCK_SIZE)
+                    pygame.draw.rect(surface, self.color, rect)
+                    pygame.draw.rect(surface, color['GRAY'], rect, 1)
+
+# ==============Game 클래스====================
+class Game:
+    def __init__(self, screen):
+        self.screen = screen
+        self.clock = pygame.time.Clock()
+        self.last_drop_time = time.time()
+
+        I_SHAPE = [[1], [1], [1], [1]]
+        self.current = Tetromino(3, 0, I_SHAPE, color['CYAN'])
+
+
+    def draw_grid(self):
+        for x in range(BOARD_WIDTH):
+            for y in range(BOARD_HEIGHT):
+                rect = pygame.Rect(
+                    x * BLOCK_SIZE,
+                    y * BLOCK_SIZE,
+                    BLOCK_SIZE,
+                    BLOCK_SIZE
+                )
+                pygame.draw.rect(self.screen, color['GRAY'], rect, 1)
+
+    def update(self):
+        now = time.time()
+        if now - self.last_drop_time >= DROP_INTERVAL:
+            self.current.y += 1
+            self.last_drop_time = now
+
+    def draw(self):
+        self.screen.fill(color['BLACK'])
+        self.draw_grid()
+        self.current.draw(self.screen)
+        pygame.display.flip()
+
+    def run(self):
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+            self.update()
+            self.draw()
+            self.clock.tick(60)
+        pygame.quit()
+        sys.exit()
+
+# ===================main()========================
+def main():
+    pygame.init()
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    pygame.display.set_caption("Tetris")
+    game = Game(screen)
+    game.run()
+
+if __name__ == "__main__":
+    main()
